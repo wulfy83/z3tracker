@@ -24,7 +24,7 @@ function blank_tracker() {
         },
         notes: "",
         autotrack: {
-            enabled: true,
+            enabled: false,
             status: "",
         },
     };
