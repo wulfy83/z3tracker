@@ -21,6 +21,7 @@ Vue.component("tracker-main", {
             <div class="tracker-column-set">
                 <connector-set v-for="(set, i) of game.connectors"
                         :connectors="set" :key="i" />
+                <settings />
                 <connector-set v-for="dungeon of connector_dungeons"
                         :connectors="[dungeon]" :key="dungeon.name" />
                 <div class="filler-column tracker-column"></div>
@@ -472,6 +473,39 @@ Vue.component("dungeon-interior-summary", {
         </div>
     `,
 });
+
+Vue.component("settings", {
+    computed: {
+        autotrack_enabled: {
+            get() {
+                return this.$root.autotrack_is_enabled();
+            },
+            set(enabled) {
+                this.$root.set_autotrack_enabled(enabled);
+            },
+        },
+        status() {
+            return this.$root.get_autotrack_status();
+        },
+        status_style() {
+            return {
+                color: (this.status === "Working") ? "#00ff00" : "#ff0000",
+            };
+        },
+    },
+    template: `
+        <div class="settings-container">
+            <div class="settings">
+                <p>
+                    <input type="checkbox" id="autotrack_enabled" v-model="autotrack_enabled" />
+                    <label for="autotrack_enabled">Enable Auto-Tracking</label>
+                </p>
+                <p>Status: <span :style="status_style">{{ status }}</span></p>
+            </div>
+        </div>
+    `,
+});
+
 
 Vue.component("connector-set", {
     props: ["connectors"],

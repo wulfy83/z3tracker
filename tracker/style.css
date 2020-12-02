@@ -64,6 +64,22 @@ body {
     width: 232px;
 }
 
+.settings-container {
+    position: relative;
+}
+
+.settings {
+    position: absolute;
+    width: 500px;
+    height: 230px;
+    top: 190px;
+    padding: 10px;
+}
+
+.settings p {
+    margin-bottom: 12px;
+}
+
 .cover {
     position: absolute;
     top: 0;

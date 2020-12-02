@@ -21,9 +21,12 @@ function blank_tracker() {
         dungeon_keys: {},
         last_dungeon_interior: null,
         items: {
-            bombs: 1,
         },
         notes: "",
+        autotrack: {
+            enabled: true,
+            status: "",
+        },
     };
 }
 
@@ -199,12 +202,34 @@ var app = new Vue({
         },
 
         item_icon(item) {
+            if (item === "powder") {
+                if (!this.tracker.items.powder && this.tracker.items.mushroom) {
+                    return "mushroom";
+                }
+            }
+            if (item === "flute") {
+                if (!this.tracker.items.flute && this.tracker.items.shovel) {
+                    return "shovel";
+                }
+            }
+
             const item_level = this.tracker.items[item] || 0;
             const index = Math.max(item_level - 1, 0);
             return this.game.item_sets[item][index];
         },
 
         item_found(item) {
+            if (item === "powder") {
+                if (!this.tracker.items.powder && this.tracker.items.mushroom) {
+                    return 1;
+                }
+            }
+            if (item === "flute") {
+                if (!this.tracker.items.flute && this.tracker.items.shovel) {
+                    return 1;
+                }
+            }
+
             return this.tracker.items[item];
         },
 
@@ -345,7 +370,45 @@ var app = new Vue({
 
         log_coordinates(x, y) {
             const adjust = z => Math.round((z / this.config.map_size) * 10000);
-            console.log(adjust(x), adjust(y));
+            log(adjust(x), adjust(y));
+        },
+
+        autotrack_is_enabled() {
+            return this.tracker.autotrack.enabled;
+        },
+
+        set_autotrack_enabled(enabled) {
+            this.tracker.autotrack.enabled = enabled;
+        },
+
+        set_autotrack_status(status) {
+            log("Status: " + status);
+            this.tracker.autotrack.status = status;
+        },
+
+        get_autotrack_status() {
+            const status = this.tracker.autotrack.status;
+            const enabled = this.tracker.autotrack.enabled;
+            if (status === "Working" && !enabled) {
+                return "Disabled";
+            } else {
+                return status;
+            }
+        },
+
+        autotrack_update(data) {
+            this.set_autotrack_status("Working");
+            log(data);
+
+            if (data.items) {
+                this.tracker.items = data.items;
+            }
+            if (data.big_keys) {
+                this.tracker.dungeon_bigkey = data.big_keys;
+            }
+            if (data.keys) {
+                this.tracker.dungeon_keys = data.keys;
+            }
         },
     },
 });
@@ -360,4 +423,18 @@ function mode_normal() {
 
 function mode_doors() {
     app.set_mode("doors");
+}
+
+function autotrack_enable() {
+    app.set_autotrack_enabled(true);
+}
+
+function autotrack_disable() {
+    app.set_autotrack_enabled(false);
+}
+
+function log(message) {
+    if (DEBUG) {
+        console.log(message);
+    }
 }
