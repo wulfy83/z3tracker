@@ -72,7 +72,14 @@ class SnesSocket {
 
             this.send("Attach", device);
             this.send("Name", "z3tracker");
+        } catch (error) {
+            this.disconnect();
+            throw error;
+        }
+    }
 
+    async ensure_z3r() {
+        try {
             this.send("Info");
             const info_response = await this.receive();
             log(info_response);
@@ -234,6 +241,7 @@ async function autotrack_main() {
         if (app.autotrack_is_enabled()) {
             try {
                 await snes.ensure_ready();
+                await snes.ensure_z3r();
 
                 const module = await snes.get_work_ram(0x10, 1);
                 if (module[0] <= 5) {
