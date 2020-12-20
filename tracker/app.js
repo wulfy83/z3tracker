@@ -284,8 +284,8 @@ var app = new Vue({
             this.$set(this.tracker.dungeon_bigkey, dungeon.name, false);
         },
 
-        track_small_keys() {
-            return this.tracker.mode !== "doors";
+        maximum_small_keys_unknown() {
+            return this.tracker.mode === "doors";
         },
 
         dungeon_small_keys(dungeon) {

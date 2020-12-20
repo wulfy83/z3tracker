@@ -425,6 +425,9 @@ Vue.component("dungeon-smallkeys", {
         max() {
             return this.dungeon.keys;
         },
+        show_number() {
+            return this.$root.maximum_small_keys_unknown();
+        },
     },
     methods: {
         key_classes(i) {
@@ -447,12 +450,17 @@ Vue.component("dungeon-smallkeys", {
         <div class="dungeon-smallkeys"
                 @click="increase"
                 @click.right="decrease">
-            <div v-for="i of 6"
-                    class="dungeon-smallkey-icon"
-                    :class="key_classes(i)"
-                    style="background-image: url(images/icons/smallkey.png)"
-                    :style="key_style(i)">
+            <div v-if="show_number" class="label dungeon-smallkey-counter">
+                {{ count }}
             </div>
+            <template v-else>
+                <div v-for="i of 6"
+                        class="dungeon-smallkey-icon"
+                        :class="key_classes(i)"
+                        style="background-image: url(images/icons/smallkey.png)"
+                        :style="key_style(i)">
+                </div>
+            </template>
         </div>
     `,
 });

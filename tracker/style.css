@@ -191,6 +191,14 @@ td {
     position: relative;
 }
 
+.dungeon-smallkey-counter {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    font-weight: bold;
+}
+
 .dungeon-smallkey-icon {
     width: 16px;
     height: 32px;

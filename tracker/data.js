@@ -26,19 +26,19 @@ function game_data(mode) {
         },
 
         doors: {
-            Eastern: { keys: 0, bigkey: true  },
-            Desert:  { keys: 0, bigkey: true  },
-            Hera:    { keys: 0, bigkey: true  },
-            PoD:     { keys: 0, bigkey: true  },
-            Swamp:   { keys: 0, bigkey: true  },
-            Skull:   { keys: 0, bigkey: true  },
-            Thieves: { keys: 0, bigkey: true  },
-            Ice:     { keys: 0, bigkey: true  },
-            Mire:    { keys: 0, bigkey: true  },
-            TRock:   { keys: 0, bigkey: true  },
-            Castle:  { keys: 0, bigkey: true  },
-            Aga:     { keys: 0, bigkey: true  },
-            GT:      { keys: 0, bigkey: true  },
+            Eastern: { keys: 100, bigkey: true  },
+            Desert:  { keys: 100, bigkey: true  },
+            Hera:    { keys: 100, bigkey: true  },
+            PoD:     { keys: 100, bigkey: true  },
+            Swamp:   { keys: 100, bigkey: true  },
+            Skull:   { keys: 100, bigkey: true  },
+            Thieves: { keys: 100, bigkey: true  },
+            Ice:     { keys: 100, bigkey: true  },
+            Mire:    { keys: 100, bigkey: true  },
+            TRock:   { keys: 100, bigkey: true  },
+            Castle:  { keys: 100, bigkey: true  },
+            Aga:     { keys: 100, bigkey: true  },
+            GT:      { keys: 100, bigkey: true  },
         },
     };
 
@@ -314,563 +314,511 @@ function game_data(mode) {
         rewards: ["unknown", "crystal", "red_crystal", "pendant", "green_pendant"],
 
         choices: {
-            default: {
-                Eastern: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                Desert: [
-                    {
-                        name: "Final",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                    {
-                        name: "Popos",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                Hera: [
-                    {
-                        name: "Tower",
-                        paths: [
-                            "Entrance Up",
-                            "Entrance Left",
-                            "Entrance Right",
-                            "2F Up",
-                            "2F Down",
-                            "BigChest Left",
-                            "BigChest Right",
-                            "4F Left",
-                            "4F Right",
-                            "Moldorm",
-                        ],
-                    },
-                ],
-                PoD: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Left",
-                            "Middle",
-                            "Right",
-                        ],
-                    },
-                ],
-                Swamp: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                Thieves: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Southeast Left",
-                            "Northwest Right",
-                            "BigKey Up",
-                            "Shutter",
-                        ],
-                    },
-                    {
-                        name: "Maiden",
-                        paths: [
-                            "Up",
-                            "Left 1",
-                            "Left 2",
-                        ],
-                    },
-                ],
-                Skull: [
-                    {
-                        name: "Final",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                    {
-                        name: "BigChest",
-                        paths: [
-                            "Left",
-                            "Down",
-                        ],
-                    },
-                    {
-                        name: "Statue Switch",
-                        paths: [
-                            "Left",
-                        ],
-                    },
-                    {
-                        name: "Star Drop",
-                        paths: [
-                            "Right",
-                        ],
-                    },
-                    {
-                        name: "Firebar Drop",
-                        paths: [
-                            "Up",
-                            "Right",
-                        ],
-                    },
-                    {
-                        name: "Mummy Drop",
-                        paths: [
-                            "Up",
-                            "Shutter",
-                        ],
-                    },
-                ],
-                Ice: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                Mire: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                TRock: [
-                    {
-                        name: "Front",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                    {
-                        name: "Eye Wall",
-                        paths: [
-                            "Right",
-                        ],
-                    },
-                    {
-                        name: "BigChest",
-                        paths: [
-                            "Up 1",
-                            "Up 2",
-                            "Left",
-                        ],
-                    },
-                    {
-                        name: "Laser Bridge",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                Castle: [
-                    {
-                        name: "Left Entrance",
-                        paths: [
-                            "Up",
-                            "Right 1",
-                            "Right 2",
-                        ],
-                    },
-                    {
-                        name: "Middle Entrance",
-                        paths: [
-                            "Up",
-                            "Left 1",
-                            "Left 2",
-                            "Right",
-                        ],
-                    },
-                    {
-                        name: "Right Entrance",
-                        paths: [
-                            "Up 1",
-                            "Up 2",
-                            "Left",
-                        ],
-                    },
-                    {
-                        name: "Sewer Drop",
-                        paths: [
-                            "Up",
-                            "Down",
-                        ],
-                    },
-                ],
-                Aga: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Up",
-                        ],
-                    },
-                ],
-                GT: [
-                    {
-                        name: "Entrance",
-                        paths: [
-                            "Left",
-                            "Middle",
-                            "Right",
-                        ],
-                    },
-                ],
-            },
-
             random: [
                 {
-                    name: "Red Carpet Hall",
+                    name: "Castle Front",
                     paths: [
-                        "Left",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Up" },
+                        { name: "Right" },
+                        { name: "Down" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Royal Tee",
+                    name: "Castle Left",
                     paths: [
-                        "Up",
-                        "Left",
-                        "Right",
+                        { name: "Up" },
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                        { name: "Down" },
                     ],
                 },
                 {
-                    name: "Nice View",
+                    name: "Castle Right",
                     paths: [
-                        "Left",
-                        "Right",
-                        "Down",
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Down" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Eyegore BigChest",
+                    name: "Castle Hall",
                     paths: [
-                        "Up",
-                        "Left",
-                        "Right",
+                        { name: "Down 1" },
+                        { name: "Down 2" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Bones & Hint",
+                    name: "Castle T",
                     paths: [
-                        "Left",
-                        "Right 1",
-                        "Right 2",
-                        "Down",
+                        { name: "Up" },
+                        { name: "Right" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Gloomy Drops & Mimic Warps",
+                    name: "Castle Dungeon 1",
                     paths: [
-                        "Up 1",
-                        "Chest Stairs",
-                        "Up 2",
-                        "Down",
-                        "Drop Stairs",
-                        "Warp Stairs",
-                        "Mimics Up",
+                        { name: "Up" },
+                        { name: "Down 1" },
+                        { name: "Down 2", oneway: "in" },
                     ],
                 },
                 {
-                    name: "Beetle Arena",
+                    name: "Castle Dungeon 2",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Right",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Up" },
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                    ],
+                },
+
+                {
+                    name: "Eastern T",
+                    paths: [
+                        { name: "Right" },
+                        { name: "Down" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Whack-a-Mole Ledge",
+                    name: "Eastern Hint",
                     paths: [
-                        "Up",
-                        "Left 1",
-                        "Left 2",
-                        "Down",
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                        { name: "Down" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Hammer Jump",
+                    name: "Eastern Big Chest",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Left",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Up" },
+                        { name: "Right" },
+                        { name: "Left" },
+                    ],
+                },
+
+                {
+                    name: "Desert Front",
+                    paths: [
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Up 3" },
+                        { name: "Right" },
+                        { name: "Down" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Water Bubble Hall",
+                    name: "Desert Map",
                     paths: [
-                        "Up",
-                        "Left 1",
-                        "Left 2",
+                        { name: "Right" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Hammer Drain",
+                    name: "Desert Compass",
                     paths: [
-                        "Left 1",
-                        "Left 2",
-                        "Right",
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Down" },
+                        { name: "Left" },
+                    ],
+                },
+
+                {
+                    name: "Hera Tower",
+                    paths: [
+                        { name: "Ground Floor Back" },
+                        { name: "Ground Floor Left" },
+                        { name: "Ground Floor Right" },
+                        { name: "2nd Floor Front" },
+                        { name: "2nd Floor Back" },
+                        { name: "Chest Floor Left" },
+                        { name: "Chest Floor Right" },
+                        { name: "4th Floor Left" },
+                        { name: "4th Floor Right" },
+                        { name: "Boss Stairs" },
+                    ],
+                },
+
+                {
+                    name: "PoD Front",
+                    paths: [
+                        { name: "Stairs 1" },
+                        { name: "Up" },
+                        { name: "Stairs 2" },
+                        { name: "Down" },
                     ],
                 },
                 {
-                    name: "Wet BigChest",
+                    name: "PoD Drops",
                     paths: [
-                        "Up",
-                        "Left 1",
-                        "Left 2",
-                        "Right",
-                        "Down",
+                        { name: "Up 1" },
+                        { name: "Chest Stairs" },
+                        { name: "Up 2" },
+                        { name: "Down" },
+                        { name: "Drop Stairs" },
+                        { name: "Mimics" },
                     ],
                 },
                 {
-                    name: "Crystal Drain",
+                    name: "PoD Arena",
                     paths: [
-                        "Left",
-                        "Right 1",
-                        "Right 2",
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Right" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
                     ],
                 },
                 {
-                    name: "Wet Drops",
+                    name: "PoD Map",
                     paths: [
-                        "Upper Stairs",
-                        "Lower Stairs",
-                        "Right 1",
-                        "Right 2",
+                        { name: "Up" },
+                        { name: "Down" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Statue Shutters Stairs",
+                    name: "PoD Back",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Mid Stairs",
-                        "Down",
+                        { name: "Stairs 1" },
+                        { name: "Stairs 2" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
+                        { name: "Left" },
+                    ],
+                },
+
+                {
+                    name: "Swamp Bubble Hall",
+                    paths: [
+                        { name: "Up" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Diver Drain",
+                    name: "Swamp Hammer Drain",
                     paths: [
-                        "Up",
-                        "Stairs 1",
-                        "Stairs 2",
-                        "Chest Stairs",
+                        { name: "Right" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Garbage Disposal",
+                    name: "Swamp Big Chest",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Left 1",
-                        "Left 2",
-                        "Down",
+                        { name: "Up" },
+                        { name: "Right" },
+                        { name: "Down" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Hellway",
+                    name: "Swamp Crystal Drain",
                     paths: [
-                        "Up",
-                        "Right 1",
-                        "Right 2",
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Switch Cross & Conveyor Drop",
+                    name: "Swamp Drops",
                     paths: [
-                        "Left Stairs",
-                        "Cross Right",
-                        "Cross Down",
-                        "Conveyor",
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                        { name: "Lower Stairs" },
+                        { name: "Upper Stairs" },
                     ],
                 },
                 {
-                    name: "Cold Tower",
+                    name: "Swamp Back",
                     paths: [
-                        "Cross Right",
-                        "Cross Down",
-                        "Hint Hall Right",
-                        "Hint Hall Down",
-                        "BigChest Stairs",
-                        "BigChest Right",
-                        "Basement Stairs",
-                        "Basement Right",
-                        "Basement Down",
+                        { name: "Left Stairs" },
+                        { name: "Right Stairs" },
+                        { name: "Front Stairs" },
+                        { name: "Down" },
                     ],
                 },
                 {
-                    name: "Cold Spike Chest",
+                    name: "Swamp Flooded Chests",
                     paths: [
-                        "Stairs 1",
-                        "Stairs 2",
-                        "Left",
+                        { name: "Up" },
+                        { name: "Left Stairs" },
+                        { name: "Right Stairs" },
+                        { name: "Front Stairs" },
+                    ],
+                },
+
+                {
+                    name: "Skull Big Chest",
+                    paths: [
+                        { name: "Down 1" },
+                        { name: "Down 2" },
+                        { name: "Left" },
+                    ],
+                },
+
+                {
+                    name: "Thieves Lobby 1",
+                    paths: [
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Right", oneway: "in" },
+                        { name: "Down" },
                     ],
                 },
                 {
-                    name: "Green Hub",
+                    name: "Thieves Lobby 2",
                     paths: [
-                        "Blue Up",
-                        "Up 2",
-                        "Left 1",
-                        "Left 2",
-                        "Blue Right",
-                        "Right 2",
-                        "Right 3",
-                        "Down",
+                        { name: "Right 1" },
+                        { name: "Right High" },
+                        { name: "Right 3" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
                     ],
                 },
                 {
-                    name: "Slug Cross",
+                    name: "Thieves Lobby 3",
                     paths: [
-                        "Up",
-                        "Right",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
+                        { name: "Left 1" },
+                        { name: "Left High" },
+                        { name: "Left 3" },
                     ],
                 },
                 {
-                    name: "Green Spike Chest",
+                    name: "Thieves Lobby 4",
                     paths: [
-                        "Up",
-                        "Left 1",
-                        "Left 2",
-                        "Down",
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Left High" },
+                        { name: "Left Low" },
                     ],
                 },
                 {
-                    name: "Tiles & Torches",
+                    name: "Thieves Back",
                     paths: [
-                        "Up",
-                        "Right 1",
-                        "Right 2",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Stairs" },
+                        { name: "Up" },
+                        { name: "Down" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Wizrobe Warps",
+                    name: "Thieves Hellway",
                     paths: [
-                        "Cutscene Stairs",
-                        "Slugs Up",
-                        "Slugs Stairs",
-                        "Spikeway Up",
-                        "Spikeway Down",
-                        "Wizrobes Up",
-                        "Wizrobes Right",
+                        { name: "Up" },
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                    ],
+                },
+
+                {
+                    name: "Ice Conveyor Cross",
+                    paths: [
+                        { name: "Upper Stairs" },
+                        { name: "Cross Right" },
+                        { name: "Cross Down" },
+                        { name: "Lower Stairs" },
                     ],
                 },
                 {
-                    name: "Green BigChest",
+                    name: "Ice Tower",
                     paths: [
-                        "Blue Up",
-                        "Blue Left",
-                        "Bridge Left",
-                        "Free Left",
+                        { name: "Cross Right" },
+                        { name: "Cross Down" },
+                        { name: "Hint Hall Right" },
+                        { name: "Hint Hall Down" },
+                        { name: "BigChest Stairs" },
+                        { name: "BigChest Right" },
+                        { name: "Basement Stairs" },
+                        { name: "Basement Right" },
+                        { name: "Basement Down" },
                     ],
                 },
                 {
-                    name: "Wood Bridges",
+                    name: "Ice Spike Chest",
                     paths: [
-                        "Up",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Stairs 1" },
+                        { name: "Stairs 2" },
+                        { name: "Left" },
+                    ],
+                },
+
+                {
+                    name: "Mire Hub",
+                    paths: [
+                        { name: "Blue Up" },
+                        { name: "Up 2" },
+                        { name: "Blue Right" },
+                        { name: "Right 2" },
+                        { name: "Right 3" },
+                        { name: "Down" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Cane Hub",
+                    name: "Mire Slug Cross",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Right 1",
-                        "Right 2",
-                        "Down 1",
-                        "Down 2",
+                        { name: "Up" },
+                        { name: "Right" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
                     ],
                 },
                 {
-                    name: "Rocky Pipes",
+                    name: "Mire Spike Chest",
                     paths: [
-                        "Up",
-                        "Left 1",
-                        "Left 2",
+                        { name: "Up" },
+                        { name: "Down" },
+                        { name: "Left 1" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Lava Pipes",
+                    name: "Mire Tile Room",
                     paths: [
-                        "Left",
-                        "Right",
-                        "Down",
+                        { name: "Up" },
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
                     ],
                 },
                 {
-                    name: "Red Mail BigChest",
+                    name: "Mire Drops and Warps",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Left",
-                        "Right",
-                        "BigChest Stairs",
-                        "Down",
+                        { name: "Cutscene Stairs" },
+                        { name: "Slugs Up" },
+                        { name: "Slugs Stairs" },
+                        { name: "Spikeway Up" },
+                        { name: "Spikeway Down" },
+                        { name: "Wizrobes Up" },
+                        { name: "Wizrobes Right" },
                     ],
                 },
                 {
-                    name: "Hookway",
+                    name: "Mire Big Chest",
                     paths: [
-                        "Up",
-                        "Right",
-                        "Down",
+                        { name: "Blue Up" },
+                        { name: "Blue Left" },
+                        { name: "Bridge Left" },
+                        { name: "Lower Left" },
                     ],
                 },
                 {
-                    name: "Excessive Warps",
+                    name: "Mire Bridges",
                     paths: [
-                        "Crystals Up",
-                        "Caged Left",
-                        "Endpoint Right",
+                        { name: "Stairs" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
+                    ],
+                },
+
+                {
+                    name: "TRock Hub",
+                    paths: [
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Right 1" },
+                        { name: "Right 2" },
+                        { name: "Down 1" },
+                        { name: "Down 2" },
                     ],
                 },
                 {
-                    name: "Mummy Hall",
+                    name: "TRock Rocky Pipes",
                     paths: [
-                        "Up",
-                        "Left",
-                        "Down",
+                        { name: "Stairs" },
+                        { name: "Left 1", oneway: "in" },
+                        { name: "Left 2" },
                     ],
                 },
                 {
-                    name: "Invisible Floor Hub",
+                    name: "TRock Lava Pipes",
                     paths: [
-                        "Up 1",
-                        "Up 2",
-                        "Left",
-                        "Shutter",
+                        { name: "Right" },
+                        { name: "Down" },
+                        { name: "Left" },
                     ],
                 },
                 {
-                    name: "Final Moldorm",
+                    name: "TRock Big Chest",
                     paths: [
-                        "Up",
-                        "Ledge Stairs",
-                        "Pit Stairs",
-                        "Left",
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Down" },
+                        { name: "Left" },
+                    ],
+                },
+
+                {
+                    name: "GT Big Chest",
+                    paths: [
+                        { name: "Left Stairs" },
+                        { name: "Right Stairs" },
+                        { name: "Right" },
+                        { name: "Big Chest Stairs" },
+                        { name: "Down" },
+                        { name: "Left" },
+                    ],
+                },
+                {
+                    name: "GT Hookway",
+                    paths: [
+                        { name: "Up" },
+                        { name: "Right" },
+                        { name: "Down" },
+                    ],
+                },
+                {
+                    name: "GT Warps",
+                    paths: [
+                        { name: "Up", oneway: "in" },
+                        { name: "Left", oneway: "out" },
+                        { name: "Right", oneway: "out" },
+                    ],
+                },
+                {
+                    name: "GT Tile Room",
+                    paths: [
+                        { name: "Up" },
+                        { name: "Down" },
+                        { name: "Left" },
+                    ],
+                },
+                {
+                    name: "GT Invisible Floor",
+                    paths: [
+                        { name: "Up 1" },
+                        { name: "Up 2" },
+                        { name: "Right", oneway: "in" },
+                        { name: "Left" },
+                    ],
+                },
+                {
+                    name: "GT Moldorm",
+                    paths: [
+                        { name: "Up", oneway: "in" },
+                        { name: "Ledge Stairs", oneway: "in" },
+                        { name: "Pit Stairs", oneway: "out" },
+                        { name: "Left", oneway: "out" },
                     ],
                 },
             ],
