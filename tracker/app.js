@@ -12,8 +12,11 @@ function get_config() {
 function blank_tracker() {
     return {
         mode: "normal",
+        coupled_entrances: true,
         door_mapping: {},
+        room_mapping: {},
         cleared_doors: {},
+        cleared_rooms: {},
         cleared_tasks: {},
         dungeon_cleared: {},
         dungeon_reward: {},
@@ -63,14 +66,6 @@ var app = new Vue({
             return game_data(this.tracker.mode);
         },
 
-        room_mapping() {
-            const result = {};
-            for (const [door, room] of Object.entries(this.tracker.door_mapping)) {
-                result[room.name] = door;
-            }
-            return result;
-        },
-
         notes() {
             return this.tracker.notes;
         },
@@ -91,6 +86,10 @@ var app = new Vue({
         set_mode(mode) {
             throw_if_invalid_mode(mode);
             this.tracker.mode = mode;
+        },
+
+        set_coupled_entrances(coupled) {
+            this.tracker.coupled_entrances = coupled;
         },
 
         part_symbol(part) {
@@ -127,40 +126,86 @@ var app = new Vue({
             return parts.map(part => this.room_instance(room, part));
         },
 
-        door_to_room(door) {
-            return this.tracker.door_mapping[door];
+        door_to_room(door_name) {
+            return this.tracker.door_mapping[door_name];
         },
 
         room_to_door(room) {
-            return this.room_mapping[room.name];
+            return this.tracker.room_mapping[room.name];
         },
 
-        assign_door(door, room) {
-            this.$set(this.tracker.door_mapping, door, { ...room });
-            if (room.auto_clear) {
-                this.$set(this.tracker.cleared_doors, door, true);
+        assign_door(door_name, room) {
+            this.$set(this.tracker.door_mapping, door_name, { ...room });
+            if (this.tracker.coupled_entrances) {
+                this.$set(this.tracker.room_mapping, room.name, door_name);
+                if (room.auto_clear) {
+                    this.$set(this.tracker.cleared_doors, door_name, true);
+                    this.$set(this.tracker.cleared_rooms, room.name, true);
+                }
             }
         },
 
-        unassign_door(door) {
-            this.$delete(this.tracker.door_mapping, door);
-            this.$delete(this.tracker.cleared_doors, door);
+        assign_room(room, door_name) {
+            this.$set(this.tracker.room_mapping, room.name, door_name);
+            if (this.tracker.coupled_entrances) {
+                this.$set(this.tracker.door_mapping, door_name, { ...room });
+                if (room.auto_clear) {
+                    this.$set(this.tracker.cleared_doors, door_name, true);
+                    this.$set(this.tracker.cleared_rooms, room.name, true);
+                }
+            }
         },
 
-        unassign_click(door) {
-            this.unassign_door(door);
+        unassign_door(door_name) {
+            const room = this.door_to_room(door_name);
+            this.$delete(this.tracker.door_mapping, door_name);
+            this.$delete(this.tracker.cleared_doors, door_name);
+            if (this.tracker.coupled_entrances) {
+                this.$delete(this.tracker.room_mapping, room.name);
+                this.$delete(this.tracker.cleared_rooms, room.name);
+            }
+        },
+
+        unassign_room(room) {
+            const door_name = this.room_to_door(room);
+            this.$delete(this.tracker.room_mapping, room.name);
+            this.$delete(this.tracker.cleared_rooms, room.name);
+            if (this.tracker.coupled_entrances) {
+                this.$delete(this.tracker.door_mapping, door_name);
+                this.$delete(this.tracker.cleared_doors, door_name);
+            }
+        },
+
+        unassign_door_click(door_name) {
+            this.unassign_door(door_name);
             this.close_modal();
         },
 
-        toggle_door_cleared(door) {
-            if (this.door_to_room(door)) {
-                const cleared = !this.tracker.cleared_doors[door];
-                this.$set(this.tracker.cleared_doors, door, cleared);
+        unassign_room_click(room) {
+            this.unassign_room(room);
+            this.close_modal();
+        },
+
+        toggle_door_cleared(door_name) {
+            const room = this.door_to_room(door_name);
+            if (room) {
+                const cleared = !this.tracker.cleared_doors[door_name];
+                this.$set(this.tracker.cleared_doors, door_name, cleared);
+                if (this.tracker.coupled_entrances) {
+                    this.$set(this.tracker.cleared_rooms, room.name, cleared);
+                }
             }
         },
 
-        door_is_cleared(door) {
-            return this.tracker.cleared_doors[door];
+        toggle_room_cleared(room) {
+            const door_name = this.room_to_door(room);
+            if (door_name) {
+                const cleared = !this.tracker.cleared_rooms[room.name];
+                this.$set(this.tracker.cleared_rooms, room.name, cleared);
+                if (this.tracker.coupled_entrances) {
+                    this.$set(this.tracker.cleared_doors, door_name, cleared);
+                }
+            }
         },
 
         toggle_task_cleared(task) {
@@ -168,13 +213,16 @@ var app = new Vue({
             this.$set(this.tracker.cleared_tasks, task, cleared);
         },
 
-        task_is_cleared(task) {
-            return this.tracker.cleared_tasks[task];
+        door_is_cleared(door_name) {
+            return this.tracker.cleared_doors[door_name];
         },
 
         room_is_cleared(room) {
-            const door = this.room_to_door(room);
-            return door && this.door_is_cleared(door);
+            return this.tracker.cleared_rooms[room.name];
+        },
+
+        task_is_cleared(task) {
+            return this.tracker.cleared_tasks[task];
         },
 
         set_notes(notes) {
@@ -189,16 +237,29 @@ var app = new Vue({
             this.modal = { ...modal };
         },
 
-        room_click(room) {
-            const door = this.room_to_door(room);
-            if (this.modal.assign_door) {
-                if (door) {
-                    return;
+        door_marker_click(door_name) {
+            const room = this.door_to_room(door_name);
+            if (this.modal.assign_room) {
+                if (!room || !this.tracker.coupled_entrances) {
+                    this.assign_room(this.modal.room, door_name);
+                    this.close_modal();
                 }
-                this.assign_door(this.modal.door, room);
-                this.close_modal();
-            } else if (door) {
-                this.open_modal({ unassign_door: true, door });
+            } else if (room) {
+                this.open_modal({ unassign_door: true, door_name });
+            } else {
+                this.open_modal({assign_door: true, door_name });
+            }
+        },
+
+        room_click(room) {
+            const door_name = this.room_to_door(room);
+            if (this.modal.assign_door) {
+                if (!door_name || !this.tracker.coupled_entrances) {
+                    this.assign_door(this.modal.door_name, room);
+                    this.close_modal();
+                }
+            } else if (door_name) {
+                this.open_modal({ unassign_room: true, room: { ... room } });
             } else {
                 this.open_modal({ assign_room: true, room: { ...room } });
             }
@@ -374,20 +435,6 @@ var app = new Vue({
             return nearest_marker;
         },
 
-        door_marker_click(door) {
-            const room = this.door_to_room(door);
-            if (this.modal.assign_room) {
-                if (!room) {
-                    this.assign_door(door, this.modal.room);
-                    this.close_modal();
-                }
-            } else if (room) {
-                this.open_modal({ unassign_door: true, door });
-            } else {
-                this.open_modal({assign_door: true, door });
-            }
-        },
-
         log_coordinates(x, y) {
             const adjust = z => Math.round((z / this.config.map_size) * 10000);
             log(adjust(x), adjust(y));
@@ -447,6 +494,14 @@ function mode_pots() {
 
 function mode_doors() {
     app.set_mode("doors");
+}
+
+function coupled_on() {
+    app.set_coupled_entrances(true);
+}
+
+function coupled_off() {
+    app.set_coupled_entrances(false);
 }
 
 function autotrack_enable() {

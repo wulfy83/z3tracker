@@ -17,6 +17,7 @@ Vue.component("tracker-main", {
                 @click.middle="toggle_dungeon_interior_modal">
             <assign-room-modal />
             <unassign-door-modal class="cover full-cover" />
+            <unassign-room-modal class="cover full-cover" />
             <dungeon-interior-modal />
             <div class="tracker-column-set">
                 <connector-set v-for="(set, i) of game.connectors"
@@ -83,7 +84,7 @@ Vue.component("assign-door-modal", {
             return this.$root.modal.assign_door;
         },
         door_name() {
-            return this.$root.modal.door;
+            return this.$root.modal.door_name;
         },
     },
     methods: {
@@ -107,11 +108,11 @@ Vue.component("unassign-door-modal", {
         is_open() {
             return this.$root.modal.unassign_door;
         },
-        door() {
-            return this.$root.modal.door;
+        door_name() {
+            return this.$root.modal.door_name;
         },
         room_name() {
-            const room = this.$root.door_to_room(this.door);
+            const room = this.$root.door_to_room(this.door_name);
             return room.name;
         },
     },
@@ -120,7 +121,7 @@ Vue.component("unassign-door-modal", {
             this.$root.close_modal();
         },
         unassign() {
-            this.$root.unassign_click(this.door);
+            this.$root.unassign_door_click(this.door_name);
         },
     },
     template: `
@@ -129,7 +130,40 @@ Vue.component("unassign-door-modal", {
             <div class="cover-box">
                 <p><b>{{ room_name }}</b></p>
                 <p>at</p>
-                <p><b>{{ door }}</b></p>
+                <p><b>{{ door_name }}</b></p>
+                <p class="unassign-button" @dblclick="unassign">Unassign</p>
+            </div>
+        </div>
+    `,
+});
+
+Vue.component("unassign-room-modal", {
+    computed: {
+        is_open() {
+            return this.$root.modal.unassign_room;
+        },
+        room() {
+            return this.$root.modal.room;
+        },
+        door_name() {
+            return this.$root.room_to_door(this.room);
+        },
+    },
+    methods: {
+        close() {
+            this.$root.close_modal();
+        },
+        unassign() {
+            this.$root.unassign_room_click(this.room);
+        },
+    },
+    template: `
+        <div v-if="is_open" class="cover full-cover">
+            <div class="backdrop" @click="close"></div>
+            <div class="cover-box">
+                <p><b>{{ room.name }}</b></p>
+                <p>at</p>
+                <p><b>{{ door_name }}</b></p>
                 <p class="unassign-button" @dblclick="unassign">Unassign</p>
             </div>
         </div>
@@ -657,13 +691,13 @@ Vue.component("room-group-boxes", {
 Vue.component("room-box", {
     props: ["room", "small"],
     computed: {
-        door() {
+        door_name() {
             return this.$root.room_to_door(this.room);
         },
         text() {
-            return !this.door ? "" :
+            return !this.door_name ? "" :
                 this.small ? "✓" :
-                this.door;
+                this.door_name;
         },
         classes() {
             const assigned = this.$root.room_to_door(this.room);
@@ -684,9 +718,7 @@ Vue.component("room-box", {
             this.$root.room_click(this.room);
         },
         clear() {
-            if (this.door) {
-                this.$root.toggle_door_cleared(this.door);
-            }
+            this.$root.toggle_room_cleared(this.room);
         },
     },
     template: `
@@ -694,7 +726,7 @@ Vue.component("room-box", {
                 :class="classes"
                 @click="click"
                 @click.right="clear">
-            <span v-if="!door">&nbsp;</span>
+            <span v-if="!door_name">&nbsp;</span>
             <span v-else>{{ text }}</span>
         </div>
     `,
