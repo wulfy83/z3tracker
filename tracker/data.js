@@ -1,5 +1,5 @@
 function throw_if_invalid_mode(mode) {
-    const valid = ["normal", "doors"];
+    const valid = ["normal", "pots", "doors"];
     if (valid.indexOf(mode) === -1) {
         throw Error(`Invalid mode: ${mode}. Valid modes are: ` + valid.join(", "));
     }
@@ -23,6 +23,22 @@ function game_data(mode) {
             Castle:  { keys: 1, bigkey: false },
             Aga:     { keys: 2, bigkey: false },
             GT:      { keys: 4, bigkey: true  },
+        },
+
+        pots: {
+            Eastern: { keys: 2, bigkey: true  },
+            Desert:  { keys: 4, bigkey: true  },
+            Hera:    { keys: 1, bigkey: true  },
+            PoD:     { keys: 6, bigkey: true  },
+            Swamp:   { keys: 6, bigkey: true  },
+            Skull:   { keys: 5, bigkey: true  },
+            Thieves: { keys: 3, bigkey: true  },
+            Ice:     { keys: 6, bigkey: true  },
+            Mire:    { keys: 6, bigkey: true  },
+            TRock:   { keys: 6, bigkey: true  },
+            Castle:  { keys: 4, bigkey: true  },
+            Aga:     { keys: 4, bigkey: false },
+            GT:      { keys: 8, bigkey: true  },
         },
 
         doors: {
@@ -313,515 +329,599 @@ function game_data(mode) {
 
         rewards: ["unknown", "crystal", "red_crystal", "pendant", "green_pendant"],
 
-        choices: {
-            random: [
-                {
-                    name: "Castle Front",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right" },
-                        { name: "Down" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Castle Left",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                        { name: "Down" },
-                    ],
-                },
-                {
-                    name: "Castle Right",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Castle Hall",
-                    paths: [
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Castle T",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Castle Dungeon 1",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Down 1" },
-                        { name: "Down 2", oneway: "in" },
-                    ],
-                },
-                {
-                    name: "Castle Dungeon 2",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                    ],
-                },
+        dungeon_features: [
+            "entrance_1",
+            "entrance_2",
+            "entrance_3",
+            "entrance_4",
+            "entrance_D",
+            "crystal_switch",
+            "red_peg",
+            "blue_peg",
+            "oneway_out",
+            "oneway_in",
+        ],
 
-                {
-                    name: "Eastern T",
-                    paths: [
-                        { name: "Right" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Eastern Hint",
-                    paths: [
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Eastern Big Chest",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right" },
-                        { name: "Left" },
-                    ],
-                },
+        dungeon_icons: [
+            "bigkey",
+            "smallkey",
+            "sword",
+            "bow",
+            "red_boom",
+            "hookshot",
+            "bombs",
+            "fire_rod",
+            "ice_rod",
+            "bombos",
+            "lamp",
+            "hammer",
+            "somaria",
+            "cape",
+            "boots",
+            "glove",
+            "flippers",
+        ],
 
-                {
-                    name: "Desert Front",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Up 3" },
-                        { name: "Right" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Desert Map",
-                    paths: [
-                        { name: "Right" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Desert Compass",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
+        dungeon_rooms: [
+            {
+                dungeon: "Castle",
+                name: "Front",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right" },
+                    { name: "Down" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Castle",
+                name: "Left",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                    { name: "Down" },
+                ],
+            },
+            {
+                dungeon: "Castle",
+                name: "Right",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Castle",
+                name: "Hall",
+                paths: [
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Castle",
+                name: "T",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Castle",
+                name: "Dungeon 1",
+                paths: [
+                    { name: "Up" },
+                    { name: "Down 1" },
+                    { name: "Down 2", oneway: "in" },
+                ],
+            },
+            {
+                dungeon: "Castle",
+                name: "Dungeon 2",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                ],
+            },
 
-                {
-                    name: "Hera Tower",
-                    paths: [
-                        { name: "Ground Floor Back" },
-                        { name: "Ground Floor Left" },
-                        { name: "Ground Floor Right" },
-                        { name: "2nd Floor Front" },
-                        { name: "2nd Floor Back" },
-                        { name: "Chest Floor Left" },
-                        { name: "Chest Floor Right" },
-                        { name: "4th Floor Left" },
-                        { name: "4th Floor Right" },
-                        { name: "Boss Stairs" },
-                    ],
-                },
+            {
+                dungeon: "Eastern",
+                name: "T",
+                paths: [
+                    { name: "Right" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Eastern",
+                name: "Hint",
+                paths: [
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Eastern",
+                name: "Big Chest",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right" },
+                    { name: "Left" },
+                ],
+            },
 
-                {
-                    name: "PoD Front",
-                    paths: [
-                        { name: "Stairs 1" },
-                        { name: "Up" },
-                        { name: "Stairs 2" },
-                        { name: "Down" },
-                    ],
-                },
-                {
-                    name: "PoD Drops",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Chest Stairs" },
-                        { name: "Up 2" },
-                        { name: "Down" },
-                        { name: "Drop Stairs" },
-                        { name: "Mimics" },
-                    ],
-                },
-                {
-                    name: "PoD Arena",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Right" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                    ],
-                },
-                {
-                    name: "PoD Map",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Down" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "PoD Back",
-                    paths: [
-                        { name: "Stairs 1" },
-                        { name: "Stairs 2" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                        { name: "Left" },
-                    ],
-                },
+            {
+                dungeon: "Desert",
+                name: "Front",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Up 3" },
+                    { name: "Right" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Desert",
+                name: "Map",
+                paths: [
+                    { name: "Right" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Desert",
+                name: "Compass",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
 
-                {
-                    name: "Swamp Bubble Hall",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Swamp Hammer Drain",
-                    paths: [
-                        { name: "Right" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Swamp Big Chest",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right" },
-                        { name: "Down" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Swamp Crystal Drain",
-                    paths: [
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "Swamp Drops",
-                    paths: [
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                        { name: "Lower Stairs" },
-                        { name: "Upper Stairs" },
-                    ],
-                },
-                {
-                    name: "Swamp Back",
-                    paths: [
-                        { name: "Left Stairs" },
-                        { name: "Right Stairs" },
-                        { name: "Front Stairs" },
-                        { name: "Down" },
-                    ],
-                },
-                {
-                    name: "Swamp Flooded Chests",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Left Stairs" },
-                        { name: "Right Stairs" },
-                        { name: "Front Stairs" },
-                    ],
-                },
+            {
+                dungeon: "Hera",
+                name: "Tower",
+                paths: [
+                    { name: "Ground Floor Back" },
+                    { name: "Ground Floor Left" },
+                    { name: "Ground Floor Right" },
+                    { name: "2nd Floor Front" },
+                    { name: "2nd Floor Back" },
+                    { name: "Chest Floor Left" },
+                    { name: "Chest Floor Right" },
+                    { name: "4th Floor Left" },
+                    { name: "4th Floor Right" },
+                    { name: "Boss Stairs" },
+                ],
+            },
 
-                {
-                    name: "Skull Big Chest",
-                    paths: [
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                        { name: "Left" },
-                    ],
-                },
+            {
+                dungeon: "PoD",
+                name: "Front",
+                paths: [
+                    { name: "Stairs 1" },
+                    { name: "Up" },
+                    { name: "Stairs 2" },
+                    { name: "Down" },
+                ],
+            },
+            {
+                dungeon: "PoD",
+                name: "Drops",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Chest Stairs" },
+                    { name: "Up 2" },
+                    { name: "Down" },
+                    { name: "Drop Stairs" },
+                    { name: "Mimics" },
+                ],
+            },
+            {
+                dungeon: "PoD",
+                name: "Arena",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Right" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                ],
+            },
+            {
+                dungeon: "PoD",
+                name: "Map",
+                paths: [
+                    { name: "Up" },
+                    { name: "Down" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "PoD",
+                name: "Back",
+                paths: [
+                    { name: "Stairs 1" },
+                    { name: "Stairs 2" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                    { name: "Left" },
+                ],
+            },
 
-                {
-                    name: "Thieves Lobby 1",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Right", oneway: "in" },
-                        { name: "Down" },
-                    ],
-                },
-                {
-                    name: "Thieves Lobby 2",
-                    paths: [
-                        { name: "Right 1" },
-                        { name: "Right High" },
-                        { name: "Right 3" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                    ],
-                },
-                {
-                    name: "Thieves Lobby 3",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                        { name: "Left 1" },
-                        { name: "Left High" },
-                        { name: "Left 3" },
-                    ],
-                },
-                {
-                    name: "Thieves Lobby 4",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Left High" },
-                        { name: "Left Low" },
-                    ],
-                },
-                {
-                    name: "Thieves Back",
-                    paths: [
-                        { name: "Stairs" },
-                        { name: "Up" },
-                        { name: "Down" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Thieves Hellway",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                    ],
-                },
+            {
+                dungeon: "Swamp",
+                name: "Key Hall",
+                paths: [
+                    { name: "Up" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Swamp",
+                name: "Hammer Drain",
+                paths: [
+                    { name: "Right" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Swamp",
+                name: "Big Chest",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right" },
+                    { name: "Down" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Swamp",
+                name: "Crystal Drain",
+                paths: [
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "Swamp",
+                name: "Drops",
+                paths: [
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                    { name: "Lower Stairs" },
+                    { name: "Upper Stairs" },
+                ],
+            },
+            {
+                dungeon: "Swamp",
+                name: "Back",
+                paths: [
+                    { name: "Left Stairs" },
+                    { name: "Right Stairs" },
+                    { name: "Front Stairs" },
+                    { name: "Down" },
+                ],
+            },
+            {
+                dungeon: "Swamp",
+                name: "Flooded Chests",
+                paths: [
+                    { name: "Up" },
+                    { name: "Left Stairs" },
+                    { name: "Right Stairs" },
+                    { name: "Front Stairs" },
+                ],
+            },
 
-                {
-                    name: "Ice Conveyor Cross",
-                    paths: [
-                        { name: "Upper Stairs" },
-                        { name: "Cross Right" },
-                        { name: "Cross Down" },
-                        { name: "Lower Stairs" },
-                    ],
-                },
-                {
-                    name: "Ice Tower",
-                    paths: [
-                        { name: "Cross Right" },
-                        { name: "Cross Down" },
-                        { name: "Hint Hall Right" },
-                        { name: "Hint Hall Down" },
-                        { name: "BigChest Stairs" },
-                        { name: "BigChest Right" },
-                        { name: "Basement Stairs" },
-                        { name: "Basement Right" },
-                        { name: "Basement Down" },
-                    ],
-                },
-                {
-                    name: "Ice Spike Chest",
-                    paths: [
-                        { name: "Stairs 1" },
-                        { name: "Stairs 2" },
-                        { name: "Left" },
-                    ],
-                },
+            {
+                dungeon: "Skull",
+                name: "Big Chest",
+                paths: [
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                    { name: "Left" },
+                ],
+            },
 
-                {
-                    name: "Mire Hub",
-                    paths: [
-                        { name: "Blue Up" },
-                        { name: "Up 2" },
-                        { name: "Blue Right" },
-                        { name: "Right 2" },
-                        { name: "Right 3" },
-                        { name: "Down" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Mire Slug Cross",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                    ],
-                },
-                {
-                    name: "Mire Spike Chest",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Down" },
-                        { name: "Left 1" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "Mire Tile Room",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                    ],
-                },
-                {
-                    name: "Mire Drops and Warps",
-                    paths: [
-                        { name: "Cutscene Stairs" },
-                        { name: "Slugs Up" },
-                        { name: "Slugs Stairs" },
-                        { name: "Spikeway Up" },
-                        { name: "Spikeway Down" },
-                        { name: "Wizrobes Up" },
-                        { name: "Wizrobes Right" },
-                    ],
-                },
-                {
-                    name: "Mire Big Chest",
-                    paths: [
-                        { name: "Blue Up" },
-                        { name: "Blue Left" },
-                        { name: "Bridge Left" },
-                        { name: "Lower Left" },
-                    ],
-                },
-                {
-                    name: "Mire Bridges",
-                    paths: [
-                        { name: "Stairs" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                    ],
-                },
+            {
+                dungeon: "Thieves",
+                name: "Lobby 1",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Right", oneway: "in" },
+                    { name: "Down" },
+                ],
+            },
+            {
+                dungeon: "Thieves",
+                name: "Lobby 2",
+                paths: [
+                    { name: "Right 1" },
+                    { name: "Right High" },
+                    { name: "Right 3" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                ],
+            },
+            {
+                dungeon: "Thieves",
+                name: "Lobby 3",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                    { name: "Left 1" },
+                    { name: "Left High" },
+                    { name: "Left 3" },
+                ],
+            },
+            {
+                dungeon: "Thieves",
+                name: "Lobby 4",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Left High" },
+                    { name: "Left Low" },
+                ],
+            },
+            {
+                dungeon: "Thieves",
+                name: "Back",
+                paths: [
+                    { name: "Stairs" },
+                    { name: "Up" },
+                    { name: "Down" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Thieves",
+                name: "Hellway",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                ],
+            },
 
-                {
-                    name: "TRock Hub",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Right 1" },
-                        { name: "Right 2" },
-                        { name: "Down 1" },
-                        { name: "Down 2" },
-                    ],
-                },
-                {
-                    name: "TRock Rocky Pipes",
-                    paths: [
-                        { name: "Stairs" },
-                        { name: "Left 1", oneway: "in" },
-                        { name: "Left 2" },
-                    ],
-                },
-                {
-                    name: "TRock Lava Pipes",
-                    paths: [
-                        { name: "Right" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "TRock Big Chest",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
+            {
+                dungeon: "Ice",
+                name: "Conveyor Cross",
+                paths: [
+                    { name: "Upper Stairs" },
+                    { name: "Cross Right" },
+                    { name: "Cross Down" },
+                    { name: "Lower Stairs" },
+                ],
+            },
+            {
+                dungeon: "Ice",
+                name: "Tower",
+                paths: [
+                    { name: "Cross Right" },
+                    { name: "Cross Down" },
+                    { name: "Hint Hall Right" },
+                    { name: "Hint Hall Down" },
+                    { name: "BigChest Stairs" },
+                    { name: "BigChest Right" },
+                    { name: "Basement Stairs" },
+                    { name: "Basement Right" },
+                    { name: "Basement Down" },
+                ],
+            },
+            {
+                dungeon: "Ice",
+                name: "Spike Chest",
+                paths: [
+                    { name: "Stairs 1" },
+                    { name: "Stairs 2" },
+                    { name: "Left" },
+                ],
+            },
 
-                {
-                    name: "GT Big Chest",
-                    paths: [
-                        { name: "Left Stairs" },
-                        { name: "Right Stairs" },
-                        { name: "Right" },
-                        { name: "Big Chest Stairs" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "GT Hookway",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Right" },
-                        { name: "Down" },
-                    ],
-                },
-                {
-                    name: "GT Warps",
-                    paths: [
-                        { name: "Up", oneway: "in" },
-                        { name: "Left", oneway: "out" },
-                        { name: "Right", oneway: "out" },
-                    ],
-                },
-                {
-                    name: "GT Tile Room",
-                    paths: [
-                        { name: "Up" },
-                        { name: "Down" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "GT Invisible Floor",
-                    paths: [
-                        { name: "Up 1" },
-                        { name: "Up 2" },
-                        { name: "Right", oneway: "in" },
-                        { name: "Left" },
-                    ],
-                },
-                {
-                    name: "GT Moldorm",
-                    paths: [
-                        { name: "Up", oneway: "in" },
-                        { name: "Ledge Stairs", oneway: "in" },
-                        { name: "Pit Stairs", oneway: "out" },
-                        { name: "Left", oneway: "out" },
-                    ],
-                },
-            ],
-        },
+            {
+                dungeon: "Mire",
+                name: "Hub",
+                paths: [
+                    { name: "Blue Up" },
+                    { name: "Up 2" },
+                    { name: "Blue Right" },
+                    { name: "Right 2" },
+                    { name: "Right 3" },
+                    { name: "Down" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Mire",
+                name: "Slug Cross",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                ],
+            },
+            {
+                dungeon: "Mire",
+                name: "Spike Chest",
+                paths: [
+                    { name: "Up" },
+                    { name: "Down" },
+                    { name: "Left 1" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "Mire",
+                name: "Tile Room",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                ],
+            },
+            {
+                dungeon: "Mire",
+                name: "Drops and Warps",
+                paths: [
+                    { name: "Cutscene Stairs" },
+                    { name: "Slugs Up" },
+                    { name: "Slugs Stairs" },
+                    { name: "Spikeway Up" },
+                    { name: "Spikeway Down" },
+                    { name: "Wizrobes Up" },
+                    { name: "Wizrobes Right" },
+                ],
+            },
+            {
+                dungeon: "Mire",
+                name: "Big Chest",
+                paths: [
+                    { name: "Blue Up" },
+                    { name: "Blue Left" },
+                    { name: "Bridge Left" },
+                    { name: "Lower Left" },
+                ],
+            },
+            {
+                dungeon: "Mire",
+                name: "Bridges",
+                paths: [
+                    { name: "Stairs" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                ],
+            },
+
+            {
+                dungeon: "TRock",
+                name: "Hub",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Right 1" },
+                    { name: "Right 2" },
+                    { name: "Down 1" },
+                    { name: "Down 2" },
+                ],
+            },
+            {
+                dungeon: "TRock",
+                name: "Rocky Pipes",
+                paths: [
+                    { name: "Stairs" },
+                    { name: "Left 1", oneway: "in" },
+                    { name: "Left 2" },
+                ],
+            },
+            {
+                dungeon: "TRock",
+                name: "Lava Pipes",
+                paths: [
+                    { name: "Right" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "TRock",
+                name: "Big Chest",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+
+            {
+                dungeon: "GT",
+                name: "Big Chest",
+                paths: [
+                    { name: "Left Stairs" },
+                    { name: "Right Stairs" },
+                    { name: "Right" },
+                    { name: "Big Chest Stairs" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "GT",
+                name: "Hookway",
+                paths: [
+                    { name: "Up" },
+                    { name: "Right" },
+                    { name: "Down" },
+                ],
+            },
+            {
+                dungeon: "GT",
+                name: "Warps",
+                paths: [
+                    { name: "Up", oneway: "in" },
+                    { name: "Left", oneway: "out" },
+                    { name: "Right", oneway: "out" },
+                ],
+            },
+            {
+                dungeon: "GT",
+                name: "Tile Room",
+                paths: [
+                    { name: "Up" },
+                    { name: "Down" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "GT",
+                name: "Invisible Floor",
+                paths: [
+                    { name: "Up 1" },
+                    { name: "Up 2" },
+                    { name: "Right", oneway: "in" },
+                    { name: "Left" },
+                ],
+            },
+            {
+                dungeon: "GT",
+                name: "Moldorm",
+                paths: [
+                    { name: "Up", oneway: "in" },
+                    { name: "Ledge Stairs", oneway: "in" },
+                    { name: "Pit Stairs", oneway: "out" },
+                    { name: "Left", oneway: "out" },
+                ],
+            },
+        ],
     };
 }

@@ -19,7 +19,10 @@ function blank_tracker() {
         dungeon_reward: {},
         dungeon_bigkey: {},
         dungeon_keys: {},
-        last_dungeon_interior: null,
+        dungeon_interior: {
+            last_opened_dungeon: null,
+            rooms: {},
+        },
         items: {
         },
         notes: "",
@@ -308,20 +311,37 @@ var app = new Vue({
 
         open_dungeon_interior_modal(dungeon) {
             dungeon = { ...dungeon };
-            this.last_dungeon_interior = dungeon;
+            this.tracker.dungeon_interior.last_opened_dungeon = dungeon;
             this.open_modal({ dungeon_interior: true, dungeon });
         },
 
         toggle_dungeon_interior_modal() {
             if (this.modal.dungeon_interior) {
                 this.close_modal();
-            } else if (this.last_dungeon_interior) {
-                this.open_dungeon_interior_modal(this.last_dungeon_interior);
+            } else if (this.tracker.dungeon_interior.last_opened_dungeon) {
+                this.open_dungeon_interior_modal(this.tracker.dungeon_interior.last_opened_dungeon);
             }
         },
 
-        dungeon_choices(dungeon) {
-            return this.game.choices.default[dungeon.name];
+        dungeon_interior_rooms(dungeon) {
+            return this.tracker.dungeon_interior.rooms[dungeon] || [];
+        },
+
+        dungeon_interior_add_room(dungeon, room) {
+            const rooms = this.tracker.dungeon_interior.rooms;
+            if (!rooms[dungeon]) {
+                this.$set(this.tracker.dungeon_interior.rooms, dungeon, []);
+            }
+            const existing = rooms[dungeon].find(r => r.dungeon === room.dungeon && r.name === room.name);
+            if (!existing) {
+                this.$set(this.tracker.dungeon_interior.rooms, dungeon, rooms[dungeon].concat([room]));
+            }
+        },
+
+        dungeon_interior_remove_room(dungeon, i) {
+            const new_rooms = [...this.tracker.dungeon_interior.rooms[dungeon]];
+            new_rooms.splice(i, 1);
+            this.tracker.dungeon_interior.rooms[dungeon] = new_rooms;
         },
 
         adjusted_marker_coordinates(marker) {
@@ -419,6 +439,10 @@ function reset() {
 
 function mode_normal() {
     app.set_mode("normal");
+}
+
+function mode_pots() {
+    app.set_mode("pots");
 }
 
 function mode_doors() {

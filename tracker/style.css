@@ -155,7 +155,7 @@ td {
 }
 
 .stripe-table tr:nth-child(even) > td {
-    background-color: #141414;
+    background-color: #202020;
 }
 
 .label {
@@ -407,7 +407,7 @@ td {
 
 .dungeon-interior-overlay {
     z-index: 8;
-    width: calc(100% - 244px);
+    width: calc(100% - 276px);
     background-color: black;
     box-sizing: border-box;
     padding: 16px;
@@ -425,24 +425,51 @@ td {
     margin-left: 0;
 }
 
-.dungeon-toolbox-column {
-    width: 300px;
-    text-align: center;
+.dungeon-interior-rooms-column {
+    flex-grow: 1;
 }
 
-.dungeon-choices-column {
-    flex-grow: 1;
+.dungeon-interior-picker-column {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.dungeon-interior-picker-column > div {
+    width: 200px;
+}
+
+.dungeon-interior-picker-column > div:not(:first-child) {
+    margin-left: 16px;
+}
+
+.picker-room-set {
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    border: 1px solid;
+}
+
+.picker-row {
+    box-sizing:border-box;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 12px;
+}
+
+.picker-row:not(:first-child) {
+    border-top: 1px solid;
 }
 
 .dungeon-interior-name {
     font-size: 32px;
-}
-
-.dungeon-choice {
     margin-bottom: 32px;
 }
 
-.dungeon-choice-name {
+.dungeon-interior-room {
+    margin-bottom: 32px;
+}
+
+.dungeon-interior-room-name {
     font-size: 24px;
     height: 32px;
     line-height: 32px;
