@@ -22,6 +22,8 @@ function blank_tracker() {
         dungeon_reward: {},
         dungeon_bigkey: {},
         dungeon_keys: {},
+        dungeon_map: {},
+        dungeon_compass: {},
         dungeon_interior: {
             last_opened_dungeon: null,
             rooms: {},
@@ -62,6 +64,22 @@ var app = new Vue({
     },
 
     computed: {
+        door_mapping_inverse() {
+            const result = {};
+            for (const [door_name, room] of Object.entries(this.tracker.door_mapping)) {
+                result[room.name] = door_name;
+            }
+            return result;
+        },
+
+        room_mapping_inverse() {
+            const result = {};
+            for (const [room_name, door_name] of Object.entries(this.tracker.room_mapping)) {
+                result[door_name] = room_name;
+            }
+            return result;
+        },
+
         game() {
             return game_data(this.tracker.mode);
         },
@@ -348,6 +366,30 @@ var app = new Vue({
             this.$set(this.tracker.dungeon_bigkey, dungeon.name, false);
         },
 
+        map_found(dungeon) {
+            return this.tracker.dungeon_map[dungeon.name];
+        },
+
+        add_map(dungeon) {
+            this.$set(this.tracker.dungeon_map, dungeon.name, true);
+        },
+
+        remove_map(dungeon) {
+            this.$set(this.tracker.dungeon_map, dungeon.name, false);
+        },
+
+        compass_found(dungeon) {
+            return this.tracker.dungeon_compass[dungeon.name];
+        },
+
+        add_compass(dungeon) {
+            this.$set(this.tracker.dungeon_compass, dungeon.name, true);
+        },
+
+        remove_compass(dungeon) {
+            this.$set(this.tracker.dungeon_compass, dungeon.name, false);
+        },
+
         maximum_small_keys_unknown() {
             return this.tracker.mode === "doors";
         },
@@ -475,6 +517,12 @@ var app = new Vue({
             }
             if (data.keys) {
                 this.tracker.dungeon_keys = data.keys;
+            }
+            if (data.maps) {
+                this.tracker.dungeon_map = data.maps;
+            }
+            if (data.compasses) {
+                this.tracker.dungeon_compass = data.compasses;
             }
         },
     },

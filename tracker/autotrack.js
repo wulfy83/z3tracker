@@ -125,6 +125,7 @@ function parse_items(buffer) {
 
     const bow_flags = buffer[0x4E];
     const bow =
+        (buffer[0x00] === 0) ? 0 :
         ((bow_flags & 0xC0) === 0xC0) ? 2 :
         (bow_flags & 0x80) ? 1 :
         0;
@@ -195,13 +196,11 @@ function parse_keys(buffer) {
     return keys;
 }
 
-function parse_big_keys(buffer) {
-    function bit(flags, bit) {
-        return (flags & (1 << bit)) ? 1 : 0;
-    }
-    const flags1 = buffer[0x26];
-    const flags2 = buffer[0x27];
+function bit(flags, bit) {
+    return (flags & (1 << bit)) ? 1 : 0;
+}
 
+function parse_dungeon_items(flags1, flags2) {
     return {
         "GT":      bit(flags1, 2),
         "TRock":   bit(flags1, 3),
@@ -216,19 +215,21 @@ function parse_big_keys(buffer) {
         "Aga":     bit(flags2, 3),
         "Desert":  bit(flags2, 4),
         "Eastern": bit(flags2, 5),
-        "Castle":  bit(flags2, 6),
+        "Castle":  bit(flags2, 6) | bit(flags2, 7),
     };
 }
 
 async function autotrack_read(snes) {
     item_buffer = await snes.get_save_ram(0x340, 0x50);
     const items = parse_items(item_buffer);
-    const big_keys = parse_big_keys(item_buffer);
+    const compasses = parse_dungeon_items(item_buffer[0x24], item_buffer[0x25]);
+    const big_keys = parse_dungeon_items(item_buffer[0x26], item_buffer[0x27]);
+    const maps = parse_dungeon_items(item_buffer[0x28], item_buffer[0x29]);
 
     key_buffer = await snes.get_save_ram(0x4E0, 14);
     const keys = parse_keys(key_buffer);
 
-    return { items, big_keys, keys };
+    return { items, big_keys, keys, maps, compasses };
 }
 
 async function autotrack_main() {

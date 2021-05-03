@@ -185,6 +185,10 @@ td {
     position: relative;
 }
 
+.dungeon-compass {
+    margin-right: 4px;
+}
+
 .dungeon-smallkeys {
     width: 96px;
     height: 32px;
@@ -211,7 +215,7 @@ td {
 }
 
 .dungeon-interior-summary {
-    width: 192px;
+    width: 128px;
     height: 32px;
     margin-right: 4px;
     text-align: center;

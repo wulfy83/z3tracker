@@ -341,6 +341,12 @@ Vue.component("dungeon-table", {
                         <dungeon-interior-summary :dungeon="dungeon" />
                     </td>
                     <td>
+                        <dungeon-map :dungeon="dungeon" />
+                    </td>
+                    <td>
+                        <dungeon-compass :dungeon="dungeon" />
+                    </td>
+                    <td>
                         <room-box v-if="!dungeon.parts" :room="instance(dungeon)" />
                     </td>
                     <td>
@@ -443,6 +449,76 @@ Vue.component("dungeon-bigkey", {
     template: `
         <div class="dungeon-icon" :class="classes"
                 style="background-image: url(images/icons/bigkey.png)"
+                :style="style"
+                @click="add"
+                @click.right="remove">
+        </div>
+    `,
+});
+
+Vue.component("dungeon-map", {
+    props: ["dungeon"],
+    computed: {
+        classes() {
+            const found = this.$root.map_found(this.dungeon)
+            return !found ? "icon-inactive" : null;
+        },
+        style() {
+            return {
+                "visibility": this.dungeon.map ? "visible" : "hidden",
+            };
+        },
+    },
+    methods: {
+        add() {
+            if (this.dungeon.map) {
+                this.$root.add_map(this.dungeon);
+            }
+        },
+        remove() {
+            if (this.dungeon.map) {
+                this.$root.remove_map(this.dungeon);
+            }
+        },
+    },
+    template: `
+        <div class="dungeon-icon dungeon-map" :class="classes"
+                style="background-image: url(images/icons/map.png)"
+                :style="style"
+                @click="add"
+                @click.right="remove">
+        </div>
+    `,
+});
+
+Vue.component("dungeon-compass", {
+    props: ["dungeon"],
+    computed: {
+        classes() {
+            const found = this.$root.compass_found(this.dungeon)
+            return !found ? "icon-inactive" : null;
+        },
+        style() {
+            return {
+                "visibility": this.dungeon.compass ? "visible" : "hidden",
+            };
+        },
+    },
+    methods: {
+        add() {
+            if (this.dungeon.compass) {
+                this.$root.add_compass(this.dungeon);
+            }
+        },
+        remove() {
+            if (this.dungeon.compass) {
+                this.$root.remove_compass(this.dungeon);
+            }
+        },
+    },
+    template: `
+        <div class="dungeon-icon dungeon-compass" :class="classes"
+                style="background-image: url(images/icons/compass.png)"
                 :style="style"
                 @click="add"
                 @click.right="remove">
