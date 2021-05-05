@@ -112,7 +112,7 @@ Vue.component("unassign-door-modal", {
             return this.$root.modal.door_name;
         },
         room_name() {
-            const room = this.$root.door_to_room(this.door_name);
+            const room = this.$root.door_destination(this.door_name);
             return room.name;
         },
     },
@@ -146,7 +146,7 @@ Vue.component("unassign-room-modal", {
             return this.$root.modal.room;
         },
         door_name() {
-            return this.$root.room_to_door(this.room);
+            return this.$root.room_destination(this.room);
         },
     },
     methods: {
@@ -262,11 +262,13 @@ Vue.component("door-marker", {
         },
         classes() {
             const door = this.marker.door;
-            const room = this.$root.door_to_room(door);
+            const room = this.$root.door_destination(door);
+            const source = this.$root.door_source(door);
             const cleared = this.$root.door_is_cleared(door);
             const status_class =
-                !room ? "door-marker-unassigned" :
                 cleared ? "door-marker-cleared" :
+                (!room && !source) ? "door-marker-unassigned" :
+                !room ? "door-marker-partial" :
                 room.type === "dungeon" ? "door-marker-dungeon" :
                 room.parts ? "door-marker-connector" :
                 "door-marker-generic";
@@ -277,7 +279,7 @@ Vue.component("door-marker", {
             ];
         },
         text() {
-            const room = this.$root.door_to_room(this.marker.door);
+            const room = this.$root.door_destination(this.marker.door);
             if (!room) {
                 return "";
             }
@@ -712,8 +714,15 @@ Vue.component("room-part-label", {
     computed: {
         classes() {
             const cleared = this.$root.room_is_cleared(this.room);
+            const assigned = this.$root.room_destination(this.room);
+            const source = this.$root.room_source(this.room);
+            const main =
+                (source && !assigned) ? "text-partial" :
+                cleared ? "text-muted" :
+                null;
+
             return [
-                cleared ? "text-muted" : null,
+                main,
                 this.first ? "room-part-label-first" : null,
             ];
         },
@@ -768,7 +777,7 @@ Vue.component("room-box", {
     props: ["room", "small"],
     computed: {
         door_name() {
-            return this.$root.room_to_door(this.room);
+            return this.$root.room_destination(this.room);
         },
         text() {
             return !this.door_name ? "" :
@@ -776,12 +785,13 @@ Vue.component("room-box", {
                 this.door_name;
         },
         classes() {
-            const assigned = this.$root.room_to_door(this.room);
+            const assigned = this.$root.room_destination(this.room);
+            const source = this.$root.room_source(this.room);
             const cleared = this.$root.room_is_cleared(this.room);
             const main =
+                (source && !assigned) ? "text-partial" :
                 (cleared && this.small) ? "text-muted" :
                 cleared ? "text-strike" :
-                !assigned ? "text-unassigned" :
                 null;
             return [
                 main,

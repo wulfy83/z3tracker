@@ -286,6 +286,10 @@ td {
     text-decoration: line-through;
 }
 
+.text-partial {
+    color: #ffa98b;
+}
+
 .item-tracker {
     margin-top: 32px;
 }
@@ -366,6 +370,10 @@ td {
 
 .door-marker-unassigned {
     background-color: #ff0000;
+}
+
+.door-marker-partial {
+    background-color: #ffa98b;
 }
 
 .door-marker-generic {

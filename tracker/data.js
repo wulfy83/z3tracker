@@ -212,7 +212,9 @@ function game_data(mode) {
             { door: "DARK LEDGE RIGHT", world: "dark",  x: 8395, y: 930  },
             { door: "TURTLE ROCK",      world: "dark",  x: 9414, y: 794  },
 
+            { task: "pedestal",         world: "light", x: 404,  y: 456  },
             { task: "ether",            world: "light", x: 4193, y: 140  },
+            { task: "spectacle rock",   world: "light", x: 5053, y: 614  },
             { task: "floating island",  world: "light", x: 8105, y: 228  },
             { task: "zora",             world: "light", x: 9667, y: 1404 },
             { task: "zora ledge",       world: "light", x: 9667, y: 1720 },
@@ -225,7 +227,9 @@ function game_data(mode) {
             { task: "bombos",           world: "light", x: 2210, y: 9228 },
             { task: "flooded item",     world: "light", x: 4320, y: 9316 },
 
+            { task: "bumper ledge",     world: "dark",  x: 3158, y: 1500 },
             { task: "catfish",          world: "dark",  x: 9175, y: 1491 },
+            { task: "pyramid",          world: "dark",  x: 5772, y: 4509 },
             { task: "digging game",     world: "dark",  x: 509,  y: 6965 },
             { task: "stumpy",           world: "dark",  x: 3088, y: 6807 },
             { task: "smith",            world: "dark",  x: 1456, y: 6561 },

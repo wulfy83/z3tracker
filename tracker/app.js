@@ -144,12 +144,20 @@ var app = new Vue({
             return parts.map(part => this.room_instance(room, part));
         },
 
-        door_to_room(door_name) {
+        door_destination(door_name) {
             return this.tracker.door_mapping[door_name];
         },
 
-        room_to_door(room) {
+        room_destination(room) {
             return this.tracker.room_mapping[room.name];
+        },
+
+        door_source(door_name) {
+            return this.room_mapping_inverse[door_name];
+        },
+
+        room_source(room) {
+            return this.door_mapping_inverse[room.name];
         },
 
         assign_door(door_name, room) {
@@ -175,7 +183,7 @@ var app = new Vue({
         },
 
         unassign_door(door_name) {
-            const room = this.door_to_room(door_name);
+            const room = this.door_destination(door_name);
             this.$delete(this.tracker.door_mapping, door_name);
             this.$delete(this.tracker.cleared_doors, door_name);
             if (this.tracker.coupled_entrances) {
@@ -185,7 +193,7 @@ var app = new Vue({
         },
 
         unassign_room(room) {
-            const door_name = this.room_to_door(room);
+            const door_name = this.room_destination(room);
             this.$delete(this.tracker.room_mapping, room.name);
             this.$delete(this.tracker.cleared_rooms, room.name);
             if (this.tracker.coupled_entrances) {
@@ -205,7 +213,7 @@ var app = new Vue({
         },
 
         toggle_door_cleared(door_name) {
-            const room = this.door_to_room(door_name);
+            const room = this.door_destination(door_name);
             if (room) {
                 const cleared = !this.tracker.cleared_doors[door_name];
                 this.$set(this.tracker.cleared_doors, door_name, cleared);
@@ -216,7 +224,7 @@ var app = new Vue({
         },
 
         toggle_room_cleared(room) {
-            const door_name = this.room_to_door(room);
+            const door_name = this.room_destination(room);
             if (door_name) {
                 const cleared = !this.tracker.cleared_rooms[room.name];
                 this.$set(this.tracker.cleared_rooms, room.name, cleared);
@@ -256,7 +264,7 @@ var app = new Vue({
         },
 
         door_marker_click(door_name) {
-            const room = this.door_to_room(door_name);
+            const room = this.door_destination(door_name);
             if (this.modal.assign_room) {
                 if (!room || !this.tracker.coupled_entrances) {
                     this.assign_room(this.modal.room, door_name);
@@ -270,7 +278,7 @@ var app = new Vue({
         },
 
         room_click(room) {
-            const door_name = this.room_to_door(room);
+            const door_name = this.room_destination(room);
             if (this.modal.assign_door) {
                 if (!door_name || !this.tracker.coupled_entrances) {
                     this.assign_door(this.modal.door_name, room);
@@ -479,7 +487,7 @@ var app = new Vue({
 
         log_coordinates(x, y) {
             const adjust = z => Math.round((z / this.config.map_size) * 10000);
-            log(adjust(x), adjust(y));
+            log(adjust(x) + ", " + adjust(y));
         },
 
         autotrack_is_enabled() {
