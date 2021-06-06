@@ -69,11 +69,7 @@ body {
 }
 
 .settings {
-    position: absolute;
-    width: 500px;
-    height: 230px;
-    top: 190px;
-    padding: 10px;
+    margin-top: 32px;
 }
 
 .settings p {
@@ -95,13 +91,13 @@ body {
 
 .room-cover {
     z-index: 1;
-    width: calc(100% - 244px);
+    width: calc(100% - 272px);
     text-align: center;
 }
 
 .full-cover {
     z-index: 6;
-    width: calc(100% - 244px);
+    width: calc(100% - 272px);
     text-align: center;
 }
 
@@ -190,7 +186,7 @@ td {
 }
 
 .dungeon-smallkeys {
-    width: 96px;
+    width: 124px;
     height: 32px;
     position: relative;
 }

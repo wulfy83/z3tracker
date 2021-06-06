@@ -8,13 +8,13 @@ Vue.component("tracker-main", {
         },
     },
     methods: {
-        toggle_dungeon_interior_modal() {
-            this.$root.toggle_dungeon_interior_modal();
+        close() {
+            this.$root.close_modal();
         },
     },
     template: `
         <div class="tracker layer noselect"
-                @click.middle="toggle_dungeon_interior_modal">
+                @click.middle="close">
             <assign-room-modal />
             <unassign-door-modal class="cover full-cover" />
             <unassign-room-modal class="cover full-cover" />
@@ -22,7 +22,6 @@ Vue.component("tracker-main", {
             <div class="tracker-column-set">
                 <connector-set v-for="(set, i) of game.connectors"
                         :connectors="set" :key="i" />
-                <settings />
                 <connector-set v-for="dungeon of connector_dungeons"
                         :connectors="[dungeon]" :key="dungeon.name" />
                 <div class="filler-column tracker-column"></div>
@@ -46,7 +45,7 @@ Vue.component("tracker-main", {
                 <div class="filler-column tracker-column"></div>
                 <div class="items-column tracker-column">
                     <item-tracker />
-                    <notes-box />
+                    <settings />
                 </div>
             </div>
         </div>
@@ -190,7 +189,7 @@ Vue.component("map-part", {
             };
         },
         markers() {
-            return this.$root.game.markers.filter(marker => marker.world === this.world);
+            return this.$root.get_markers(this.world);
         },
         door_markers() {
             return this.markers.filter(marker => marker.door);
@@ -538,7 +537,7 @@ Vue.component("dungeon-smallkeys", {
             return this.dungeon.keys;
         },
         show_number() {
-            return this.count > 6;
+            return this.count > 8;
         },
     },
     methods: {

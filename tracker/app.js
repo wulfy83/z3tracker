@@ -12,7 +12,7 @@ function get_config() {
 function blank_tracker() {
     return {
         mode: "normal",
-        coupled_entrances: true,
+        insanity: false,
         door_mapping: {},
         room_mapping: {},
         cleared_doors: {},
@@ -25,7 +25,6 @@ function blank_tracker() {
         dungeon_map: {},
         dungeon_compass: {},
         dungeon_interior: {
-            last_opened_dungeon: null,
             rooms: {},
         },
         items: {
@@ -106,8 +105,8 @@ var app = new Vue({
             this.tracker.mode = mode;
         },
 
-        set_coupled_entrances(coupled) {
-            this.tracker.coupled_entrances = coupled;
+        set_insanity(enabled) {
+            this.tracker.insanity = enabled;
         },
 
         part_symbol(part) {
@@ -162,7 +161,7 @@ var app = new Vue({
 
         assign_door(door_name, room) {
             this.$set(this.tracker.door_mapping, door_name, { ...room });
-            if (this.tracker.coupled_entrances) {
+            if (!this.tracker.insanity) {
                 this.$set(this.tracker.room_mapping, room.name, door_name);
                 if (room.auto_clear) {
                     this.$set(this.tracker.cleared_doors, door_name, true);
@@ -173,7 +172,7 @@ var app = new Vue({
 
         assign_room(room, door_name) {
             this.$set(this.tracker.room_mapping, room.name, door_name);
-            if (this.tracker.coupled_entrances) {
+            if (!this.tracker.insanity) {
                 this.$set(this.tracker.door_mapping, door_name, { ...room });
                 if (room.auto_clear) {
                     this.$set(this.tracker.cleared_doors, door_name, true);
@@ -186,7 +185,7 @@ var app = new Vue({
             const room = this.door_destination(door_name);
             this.$delete(this.tracker.door_mapping, door_name);
             this.$delete(this.tracker.cleared_doors, door_name);
-            if (this.tracker.coupled_entrances) {
+            if (!this.tracker.insanity) {
                 this.$delete(this.tracker.room_mapping, room.name);
                 this.$delete(this.tracker.cleared_rooms, room.name);
             }
@@ -196,7 +195,7 @@ var app = new Vue({
             const door_name = this.room_destination(room);
             this.$delete(this.tracker.room_mapping, room.name);
             this.$delete(this.tracker.cleared_rooms, room.name);
-            if (this.tracker.coupled_entrances) {
+            if (!this.tracker.insanity) {
                 this.$delete(this.tracker.door_mapping, door_name);
                 this.$delete(this.tracker.cleared_doors, door_name);
             }
@@ -217,7 +216,7 @@ var app = new Vue({
             if (room) {
                 const cleared = !this.tracker.cleared_doors[door_name];
                 this.$set(this.tracker.cleared_doors, door_name, cleared);
-                if (this.tracker.coupled_entrances) {
+                if (!this.tracker.insanity) {
                     this.$set(this.tracker.cleared_rooms, room.name, cleared);
                 }
             }
@@ -228,7 +227,7 @@ var app = new Vue({
             if (door_name) {
                 const cleared = !this.tracker.cleared_rooms[room.name];
                 this.$set(this.tracker.cleared_rooms, room.name, cleared);
-                if (this.tracker.coupled_entrances) {
+                if (!this.tracker.insanity) {
                     this.$set(this.tracker.cleared_doors, door_name, cleared);
                 }
             }
@@ -266,7 +265,7 @@ var app = new Vue({
         door_marker_click(door_name) {
             const room = this.door_destination(door_name);
             if (this.modal.assign_room) {
-                if (!room || !this.tracker.coupled_entrances) {
+                if (!room || this.tracker.insanity) {
                     this.assign_room(this.modal.room, door_name);
                     this.close_modal();
                 }
@@ -280,7 +279,7 @@ var app = new Vue({
         room_click(room) {
             const door_name = this.room_destination(room);
             if (this.modal.assign_door) {
-                if (!door_name || !this.tracker.coupled_entrances) {
+                if (!door_name || this.tracker.insanity) {
                     this.assign_door(this.modal.door_name, room);
                     this.close_modal();
                 }
@@ -422,16 +421,7 @@ var app = new Vue({
 
         open_dungeon_interior_modal(dungeon) {
             dungeon = { ...dungeon };
-            this.tracker.dungeon_interior.last_opened_dungeon = dungeon;
             this.open_modal({ dungeon_interior: true, dungeon });
-        },
-
-        toggle_dungeon_interior_modal() {
-            if (this.modal.dungeon_interior) {
-                this.close_modal();
-            } else if (this.tracker.dungeon_interior.last_opened_dungeon) {
-                this.open_dungeon_interior_modal(this.tracker.dungeon_interior.last_opened_dungeon);
-            }
         },
 
         dungeon_interior_rooms(dungeon) {
@@ -455,6 +445,17 @@ var app = new Vue({
             this.tracker.dungeon_interior.rooms[dungeon] = new_rooms;
         },
 
+        marker_is_enabled(marker, world) {
+            return (
+                (marker.world === world) &&
+                (!marker.hole_exit || this.tracker.insanity)
+            );
+        },
+
+        get_markers(world) {
+            return this.game.markers.filter(marker => this.marker_is_enabled(marker, world));
+        },
+
         adjusted_marker_coordinates(marker) {
             return [
                 marker.x * this.config.map_scale_factor,
@@ -471,10 +472,7 @@ var app = new Vue({
             let nearest_marker = null;
             let nearest_distance = Infinity;
 
-            for (const marker of Object.values(this.game.markers)) {
-                if (marker.world != world) {
-                    continue;
-                }
+            for (const marker of this.get_markers(world)) {
                 const distance = this.distance_from_marker(marker, x, y)
                 if (distance < nearest_distance && distance < this.config.marker_hover_radius) {
                     nearest_marker = marker;
@@ -552,12 +550,12 @@ function mode_doors() {
     app.set_mode("doors");
 }
 
-function coupled_on() {
-    app.set_coupled_entrances(true);
+function insanity_on() {
+    app.set_insanity(true);
 }
 
-function coupled_off() {
-    app.set_coupled_entrances(false);
+function insanity_off() {
+    app.set_insanity(false);
 }
 
 function autotrack_enable() {
