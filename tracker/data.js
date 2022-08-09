@@ -132,6 +132,7 @@ function game_data(mode) {
             { door: "CASTLE HOLE EXIT", world: "light", x: 5508, y: 4298, hole_exit: true },
             { door: "CASTLE HOLE",      world: "light", x: 5951, y: 4154 },
             { door: "HOME ROCKS",       world: "light", x: 4727, y: 6523 },
+            { door: "HOME",             world: "light",  x: 5469, y: 6888 },
             { door: "HOME SOUTH",       world: "light", x: 5964, y: 7786 },
             { door: "LAKE FORTUNE",     world: "light", x: 6484, y: 8021 },
             { door: "LAKE SHOP",        world: "light", x: 7266, y: 7669 },
@@ -281,6 +282,7 @@ function game_data(mode) {
 
         special_rooms: [
             { roomset: "Bomb",    short: "Bom" },
+            { roomset: "House",   short: "Hus" },
             { roomset: "Kid",     short: "Kid" },
             { roomset: "Library", short: "Lib" },
             { roomset: "Mimic",   short: "Mim" },
