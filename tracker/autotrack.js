@@ -16,6 +16,7 @@ class SnesSocket {
 
     create_websocket() {
         const socket = new WebSocket("ws://localhost:8080");
+
         socket.binaryType = "arraybuffer";
         return new Promise((resolve, reject) => {
             socket.onopen = function () { resolve(socket) };
@@ -168,7 +169,7 @@ function parse_items(buffer) {
         "boots": nonzero(0x15),
         "flippers": nonzero(0x16),
         "pearl": nonzero(0x17),
-        "sword": buffer[0x19],
+        "sword": (buffer[0x19] === 0xFF) ? 0 : buffer[0x19],
     };
 }
 
@@ -245,7 +246,7 @@ async function autotrack_main() {
                 await snes.ensure_z3r();
 
                 const module = await snes.get_work_ram(0x10, 1);
-                if (module[0] <= 5) {
+                if (module[0] <= 0x05 || module[0] === 0x14 || module[0] >= 0x1C) {
                     app.set_autotrack_status("Not In Game");
                     continue;
                 }
