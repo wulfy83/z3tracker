@@ -7,18 +7,11 @@ Vue.component("tracker-main", {
             return this.$root.game.dungeons.filter(dungeon => dungeon.parts);
         },
     },
-    methods: {
-        close() {
-            this.$root.close_modal();
-        },
-    },
     template: `
-        <div class="tracker layer noselect"
-                @click.middle="close">
+        <div class="tracker layer noselect">
             <assign-room-modal />
             <unassign-door-modal class="cover full-cover" />
             <unassign-room-modal class="cover full-cover" />
-            <dungeon-interior-modal />
             <div class="tracker-column-set">
                 <connector-set v-for="(set, i) of game.connectors"
                         :connectors="set" :key="i" />
@@ -339,9 +332,6 @@ Vue.component("dungeon-table", {
             <tbody>
                 <tr v-for="dungeon of dungeons" class="dungeon-row" :key="dungeon.name">
                     <td>
-                        <dungeon-interior-summary :dungeon="dungeon" />
-                    </td>
-                    <td>
                         <dungeon-map :dungeon="dungeon" />
                     </td>
                     <td>
@@ -575,23 +565,6 @@ Vue.component("dungeon-smallkeys", {
                         :style="key_style(i)">
                 </div>
             </template>
-        </div>
-    `,
-});
-
-Vue.component("dungeon-interior-summary", {
-    props: ["dungeon"],
-    computed: {
-    },
-    methods: {
-        open() {
-            this.$root.open_dungeon_interior_modal(this.dungeon);
-        },
-    },
-    template: `
-        <div class="dungeon-interior-summary"
-                @click="open">
-            ???
         </div>
     `,
 });
@@ -859,115 +832,6 @@ Vue.component("item-icon", {
                 :style="style"
                 @click="increase"
                 @click.right="decrease">
-        </div>
-    `,
-});
-
-Vue.component("notes-box", {
-    computed: {
-        notes: {
-            get() {
-                return this.$root.notes;
-            },
-            set(text) {
-                this.$root.set_notes(text);
-            },
-        },
-    },
-    template: `
-        <textarea class="notes" v-model="notes">
-        </textarea>
-    `,
-});
-
-Vue.component("dungeon-interior-modal", {
-    computed: {
-        is_open() {
-            return this.$root.modal.dungeon_interior;
-        },
-    },
-    template: `
-        <div v-if="is_open" class="cover dungeon-interior-overlay">
-            <dungeon-interior-picker />
-            <dungeon-interior-tracker />
-        </div>
-    `,
-});
-
-Vue.component("dungeon-interior-picker", {
-    computed: {
-        dungeon() {
-            return this.$root.modal.dungeon.name;
-        },
-        columns() {
-            const room_sets = [[]];
-            for (const room of this.$root.game.dungeon_rooms) {
-                let current_set = room_sets[room_sets.length - 1];
-                if (current_set.length > 0 && current_set[0].dungeon !== room.dungeon) {
-                    current_set = [room];
-                    room_sets.push(current_set);
-                } else {
-                    current_set.push(room);
-                }
-            }
-
-            const result = [[]];
-            let sum = 0;
-            for (const room_set of room_sets) {
-                let current_column = result[result.length - 1];
-                if (sum > 26) {
-                    current_column = [room_set];
-                    result.push(current_column);
-                    sum = 0;
-                } else {
-                    current_column.push(room_set);
-                    sum += room_set.length;
-                }
-            }
-            return result;
-        },
-    },
-    methods: {
-        add(room) {
-            this.$root.dungeon_interior_add_room(this.dungeon, room);
-        },
-    },
-    template: `
-        <div class="dungeon-interior-column dungeon-interior-picker-column">
-            <div v-for="column of columns">
-                <div v-for="room_set of column" class="picker-room-set">
-                    <div v-for="room of room_set" class="picker-row"
-                            @mousedown="add(room)">
-                        {{ room.dungeon }} {{ room.name }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `,
-});
-
-Vue.component("dungeon-interior-tracker", {
-    computed: {
-        dungeon() {
-            return this.$root.modal.dungeon.name;
-        },
-        rooms() {
-            return this.$root.dungeon_interior_rooms(this.dungeon);
-        },
-    },
-    template: `
-        <div class="dungeon-interior-rooms-column dungeon-interior-column">
-            <div class="dungeon-interior-name">
-                {{ dungeon }}
-            </div>
-            <div v-for="room of rooms" class="dungeon-interior-room">
-                <div class="dungeon-interior-room-name">{{ room.dungeon }} {{ room.name }}</div>
-                <ul class="dungeon-paths">
-                    <li v-for="path of room.paths" :key="path.name">
-                        {{ path.name }}
-                    </li>
-                </ul>
-            </div>
         </div>
     `,
 });

@@ -24,12 +24,8 @@ function blank_tracker() {
         dungeon_keys: {},
         dungeon_map: {},
         dungeon_compass: {},
-        dungeon_interior: {
-            rooms: {},
-        },
         items: {
         },
-        notes: "",
         autotrack: {
             enabled: false,
             status: "",
@@ -85,10 +81,6 @@ var app = new Vue({
 
         notes() {
             return this.tracker.notes;
-        },
-
-        track_interiors() {
-            return this.tracker.mode === "doors";
         },
     },
 
@@ -417,32 +409,6 @@ var app = new Vue({
             if (count > 0) {
                 this.$set(this.tracker.dungeon_keys, dungeon.name, count - 1);
             }
-        },
-
-        open_dungeon_interior_modal(dungeon) {
-            dungeon = { ...dungeon };
-            this.open_modal({ dungeon_interior: true, dungeon });
-        },
-
-        dungeon_interior_rooms(dungeon) {
-            return this.tracker.dungeon_interior.rooms[dungeon] || [];
-        },
-
-        dungeon_interior_add_room(dungeon, room) {
-            const rooms = this.tracker.dungeon_interior.rooms;
-            if (!rooms[dungeon]) {
-                this.$set(this.tracker.dungeon_interior.rooms, dungeon, []);
-            }
-            const existing = rooms[dungeon].find(r => r.dungeon === room.dungeon && r.name === room.name);
-            if (!existing) {
-                this.$set(this.tracker.dungeon_interior.rooms, dungeon, rooms[dungeon].concat([room]));
-            }
-        },
-
-        dungeon_interior_remove_room(dungeon, i) {
-            const new_rooms = [...this.tracker.dungeon_interior.rooms[dungeon]];
-            new_rooms.splice(i, 1);
-            this.tracker.dungeon_interior.rooms[dungeon] = new_rooms;
         },
 
         marker_is_enabled(marker, world) {
