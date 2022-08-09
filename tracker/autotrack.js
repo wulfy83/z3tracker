@@ -73,6 +73,7 @@ class SnesSocket {
 
             this.send("Attach", device);
             this.send("Name", "z3tracker");
+            await this.ensure_z3r();
         } catch (error) {
             this.disconnect();
             throw error;
@@ -80,12 +81,20 @@ class SnesSocket {
     }
 
     async ensure_z3r() {
+        if (FORCE_Z3R) {
+            return;
+        }
+
         try {
-            this.send("Info");
-            const info_response = await this.receive();
-            log(info_response);
-            const rom = JSON.parse(info_response).Results[2];
-            if (!rom.startsWith("/z3r/")) {
+            const id_bytes = await this.get_address(0x7FC0, 16);
+            const id_string = Array.from(id_bytes).map(c => String.fromCharCode(c)).join("");
+            log("ROM ID: " + id_string);
+
+            const is_z3r = id_bytes.every(c => c >= 32 && c <= 126) && (
+                    id_string.startsWith("VT ") ||
+                    id_string.startsWith("ER_") ||
+                    id_string.startsWith("AP"));
+            if (!is_z3r) {
                 throw new AutoTrackException("Not a z3r ROM", true);
             }
         } catch (error) {
@@ -101,11 +110,11 @@ class SnesSocket {
     }
 
     async get_work_ram(offset, length) {
-        return await this.get_address(0xF50000 + offset, length);
+        return this.get_address(0xF50000 + offset, length);
     }
 
     async get_save_ram(offset, length) {
-        return await this.get_address(0xF5F000 + offset, length);
+        return this.get_address(0xF5F000 + offset, length);
     }
 }
 
@@ -243,7 +252,6 @@ async function autotrack_main() {
         if (app.autotrack_is_enabled()) {
             try {
                 await snes.ensure_ready();
-                await snes.ensure_z3r();
 
                 const module = await snes.get_work_ram(0x10, 1);
                 if (module[0] <= 0x05 || module[0] === 0x14 || module[0] >= 0x1C) {
