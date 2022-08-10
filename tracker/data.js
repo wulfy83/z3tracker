@@ -247,27 +247,27 @@ function game_data(mode) {
 
         connectors: [
             [
-                { roomset: "DM Ascent",      short: "DMa", parts: ["L", "R"] },
-                { roomset: "DM Descent",     short: "DMd", parts: ["L", "R"] },
-                { roomset: "Bumper",         short: "Bmp", parts: ["U", "D"] },
+                { roomset: "DM Ascent",    short: "DMa", parts: ["L", "R"] },
+                { roomset: "DM Descent",   short: "DMd", parts: ["L", "R"] },
+                { roomset: "Bumper",       short: "Bmp", parts: ["U", "D"] },
             ],
 
             [
-                { roomset: "Brothers",       short: "Bro", parts: ["L", "R"] },
-                { roomset: "Elder",          short: "Eld", parts: ["L", "R"] },
-                { roomset: "Fairy Ascent",   short: "Fai", parts: ["U", "D"] },
+                { roomset: "Brothers",     short: "Bro", parts: ["L", "R"] },
+                { roomset: "Elder",        short: "Eld", parts: ["L", "R"] },
+                { roomset: "Fairy Ascent", short: "Fai", parts: ["U", "D"] },
             ],
 
             [
-                { roomset: "Hookshot Cave",  short: "Hok", parts: ["L", "R"] },
-                { roomset: "Spiral",         short: "Spi", parts: ["U", "D"] },
-                { roomset: "Super Bunny",    short: "Bun", parts: ["U", "D"] },
+                { roomset: "Hookshot",     short: "Hok", parts: ["L", "R"] },
+                { roomset: "Spiral",       short: "Spi", parts: ["U", "D"] },
+                { roomset: "Super Bunny",  short: "Bun", parts: ["U", "D"] },
             ],
 
             [
-                { roomset: "Old Man's Home", short: "Old", parts: ["L", "R"] },
-                { roomset: "Spectacle Rock", short: "Spc", parts: ["U", "Mid", "D"] },
-                { roomset: "Paradox Cave",   short: "Par", parts: ["U", "Mid", "D"] },
+                { roomset: "Old Man",      short: "Old", parts: ["L", "R"] },
+                { roomset: "Spectacle",    short: "Spc", parts: ["U", "Mid", "D"] },
+                { roomset: "Paradox",      short: "Par", parts: ["U", "Mid", "D"] },
             ],
         ],
 
