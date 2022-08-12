@@ -26,6 +26,7 @@ function blank_tracker() {
         dungeon_compass: {},
         items: {
         },
+        save_buffer: new Array(0x500).fill(0),
         autotrack: {
             enabled: false,
             status: "",
@@ -77,10 +78,6 @@ var app = new Vue({
 
         game() {
             return game_data(this.tracker.mode);
-        },
-
-        notes() {
-            return this.tracker.notes;
         },
     },
 
@@ -226,7 +223,7 @@ var app = new Vue({
         },
 
         toggle_task_cleared(task) {
-            const cleared = !this.tracker.cleared_tasks[task];
+            const cleared = !this.task_is_cleared(task);
             this.$set(this.tracker.cleared_tasks, task, cleared);
         },
 
@@ -242,8 +239,10 @@ var app = new Vue({
             return this.tracker.cleared_tasks[task];
         },
 
-        set_notes(notes) {
-            this.tracker.notes = notes;
+        task_is_collected(marker) {
+            const unchecked_counts = this.unchecked_counts(marker);
+            const count = unchecked_counts.nonscoutable + unchecked_counts.scoutable;
+            return count === 0;
         },
 
         close_modal() {
@@ -477,19 +476,23 @@ var app = new Vue({
             }
         },
 
-        autotrack_update(save_buffer) {
+        autotrack_update(save_buffer_part, offset) {
             this.set_autotrack_status("Working");
 
-            const item_buffer = save_buffer.slice(0x340, 0x50);
+            const save_buffer = [...this.tracker.save_buffer];
+            for (let i = 0; i < save_buffer_part.length; i++) {
+                save_buffer[offset + i] = save_buffer_part[i];
+            }
+            this.tracker.save_buffer = save_buffer;
+
+            const item_buffer = subarray(save_buffer, 0x340, 0x50);
             this.tracker.items = this.parse_items(item_buffer);
             this.tracker.dungeon_compass = this.parse_dungeon_items(item_buffer[0x24], item_buffer[0x25]);
             this.tracker.dungeon_bigkey = this.parse_dungeon_items(item_buffer[0x26], item_buffer[0x27]);
             this.tracker.dungeon_map = this.parse_dungeon_items(item_buffer[0x28], item_buffer[0x29]);
 
-            const key_buffer = save_buffer.slice(0x4E0, 14);
+            const key_buffer = subarray(save_buffer, 0x4E0, 14);
             this.tracker.dungeon_keys = this.parse_keys(key_buffer);
-
-            this.tracker.checked_locations = this.parse_checked_locations(save_buffer);
         },
 
         parse_items(buffer) {
@@ -595,15 +598,37 @@ var app = new Vue({
             };
         },
 
-        parse_checked_locations(buffer) {
-            return {
-            };
-        }
+        unchecked_counts(object) {
+            const checks = object.checks || [];
+            const result = { nonscoutable: 0, nonscoutable_max: 0, scoutable: 0, scoutable_max: 0 };
+            for (const check of checks) {
+                const address = check[0];
+                const bit_index = check[1];
+                const scoutable = check[2] === "scoutable";
+                if (scoutable) {
+                    result.scoutable_max++;
+                } else {
+                    result.nonscoutable_max++;
+                }
+                if (!bit(this.tracker.save_buffer[address], bit_index)) {
+                    if (scoutable) {
+                        result.scoutable++;
+                    } else {
+                        result.nonscoutable++;
+                    }
+                }
+            }
+            return result;
+        },
     },
 });
 
 function bit(flags, bit) {
     return (flags & (1 << bit)) !== 0;
+}
+
+function subarray(array, start, length) {
+    return array.slice(start, start + length);
 }
 
 function reset() {

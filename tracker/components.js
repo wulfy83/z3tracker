@@ -188,7 +188,7 @@ Vue.component("map-part", {
             return this.markers.filter(marker => marker.door);
         },
         task_markers() {
-            return this.markers.filter(marker => marker.task);
+            return this.markers.filter(marker => marker.task && !this.$root.task_is_collected(marker));
         },
     },
     methods: {
@@ -642,11 +642,6 @@ Vue.component("connector-set", {
 
 Vue.component("room-group", {
     props: ["rooms"],
-    computed: {
-        room_instances() {
-            return this.rooms.map(room => this.$root.room_instance(room));
-        },
-    },
     template: `
         <table class="room-table">
             <tbody>
@@ -676,10 +671,38 @@ Vue.component("room-label", {
     },
     template: `
         <div class="label room-label" :class="classes">
-            {{ text }}
+            {{ text }} <unchecked-count :room="room" />
         </div>
     `,
 });
+
+Vue.component("unchecked-count", {
+    props: ["room"],
+    computed: {
+        counts() {
+            return this.$root.unchecked_counts(this.room);
+        },
+        nonscoutable_exists() {
+            return this.counts.nonscoutable_max > 0;
+        },
+        scoutable_exists() {
+            return this.counts.scoutable_max > 0;
+        },
+        nonscoutable_class() {
+            return this.counts.nonscoutable > 0 ? "unchecked-nonscoutable" : "unchecked-zero";
+        },
+        scoutable_class() {
+            return this.counts.scoutable > 0 ? "unchecked-scoutable" : "unchecked-zero";
+        },
+    },
+    template: `
+        <span class="unchecked-counts">
+            <span :class="nonscoutable_class" v-if="nonscoutable_exists">{{ counts.nonscoutable }}</span>
+            <span :class="scoutable_class" v-if="scoutable_exists">{{ counts.scoutable }}</span>
+        </span>
+    `,
+});
+
 
 Vue.component("room-part-label", {
     props: ["room", "first"],

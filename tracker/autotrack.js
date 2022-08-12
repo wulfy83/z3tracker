@@ -125,9 +125,10 @@ function sleep(ms) {
 async function autotrack_main() {
     app.set_autotrack_status("Not Connected");
     let snes = new SnesSocket();
+    let offset = 0;
 
     while (true) {
-        await sleep(1000);
+        await sleep(100);
 
         if (app.autotrack_is_enabled()) {
             try {
@@ -139,11 +140,9 @@ async function autotrack_main() {
                     continue;
                 }
 
-                const save_bufffer = [
-                    ...await snes.get_save_ram(0, 0x400),
-                    ...await snes.get_save_ram(0x400, 0x100),
-                ];
-                app.autotrack_update(save_bufffer);
+                const buffer = await snes.get_save_ram(offset, 0x100);
+                app.autotrack_update(buffer, offset);
+                offset = (offset + 0x100) % 0x500;
             } catch (error) {
                 app.set_autotrack_status(error.message);
                 if (error.should_disable) {

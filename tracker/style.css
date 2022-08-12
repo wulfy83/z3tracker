@@ -214,12 +214,34 @@ td {
     margin-top: 32px;
 }
 
+.room-table td {
+    width: 70px;
+}
+
 .room-row {
     height: 32px;
 }
 
 .room-label {
     margin-right: 8px;
+}
+
+.unchecked-counts {
+    font-weight: bold;
+    vertical-align: super;
+    font-size: 12px;
+}
+
+.unchecked-nonscoutable {
+    color: #00ff00;
+}
+
+.unchecked-scoutable {
+    color: goldenrod;
+}
+
+.unchecked-zero {
+    color: #808080;
 }
 
 .room-part-label {

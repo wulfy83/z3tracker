@@ -220,34 +220,35 @@ function game_data(mode) {
             { door: "DARK LEDGE RIGHT", world: "dark",  x: 8395, y: 930  },
             { door: "TURTLE ROCK",      world: "dark",  x: 9414, y: 794  },
 
-            { task: "pedestal",         world: "light", x: 404,  y: 456  },
-            { task: "ether",            world: "light", x: 4193, y: 140  },
-            { task: "spectacle rock",   world: "light", x: 5053, y: 614  },
-            { task: "floating island",  world: "light", x: 8105, y: 228  },
-            { task: "zora",             world: "light", x: 9667, y: 1404 },
-            { task: "zora ledge",       world: "light", x: 9667, y: 1720 },
-            { task: "bottle merchant",  world: "light", x: 947,  y: 4632 },
-            { task: "tavern",           world: "light", x: 1579, y: 5649 },
-            { task: "race game",        world: "light", x: 298,  y: 6965 },
-            { task: "shovel",           world: "light", x: 3000, y: 6702 },
-            { task: "hylia island",     world: "light", x: 7228, y: 8298 },
-            { task: "hobo",             world: "light", x: 7105, y: 6947 },
-            { task: "desert ledge",     world: "light", x: 246,  y: 9158 },
-            { task: "bombos",           world: "light", x: 2210, y: 9228 },
-            { task: "flooded item",     world: "light", x: 4320, y: 9316 },
+            { task: "pedestal",         world: "light", x: 404,  y: 456,  checks: [[0x280 + 128, 6]] },
+            { task: "mushroom",         world: "light", x: 1193, y: 842,  checks: [[0x411, 4]] },
+            { task: "ether",            world: "light", x: 4193, y: 140,  checks: [[0x411, 0]] },
+            { task: "spectacle rock",   world: "light", x: 5053, y: 614,  checks: [[0x280 + 3, 6]] },
+            { task: "floating island",  world: "light", x: 8105, y: 228,  checks: [[0x280 + 5, 6]] },
+            { task: "zora",             world: "light", x: 9667, y: 1404, checks: [[0x410, 1]] },
+            { task: "zora ledge",       world: "light", x: 9667, y: 1720, checks: [[0x280 + 129, 6]] },
+            { task: "bottle merchant",  world: "light", x: 947,  y: 4632, checks: [[0x3c9, 1]] },
+            { task: "tavern",           world: "light", x: 1579, y: 5649, checks: [chest(259, 4)] },
+            { task: "race game",        world: "light", x: 298,  y: 6965, checks: [[0x280 + 40, 6]] },
+            { task: "shovel",           world: "light", x: 3000, y: 6702, checks: [[0x280 + 42, 6]] },
+            { task: "hylia island",     world: "light", x: 7228, y: 8298, checks: [[0x280 + 53, 6]] },
+            { task: "hobo",             world: "light", x: 7105, y: 6947, checks: [[0x3c9, 0]] },
+            { task: "desert ledge",     world: "light", x: 246,  y: 9158, checks: [[0x280 + 48, 6]] },
+            { task: "bombos",           world: "light", x: 2210, y: 9228, checks: [[0x411, 1]] },
+            { task: "flooded item",     world: "light", x: 4320, y: 9316, checks: [[0x280 + 59, 6]] },
 
-            { task: "bumper ledge",     world: "dark",  x: 3158, y: 1500 },
-            { task: "catfish",          world: "dark",  x: 9175, y: 1491 },
-            { task: "pyramid",          world: "dark",  x: 5772, y: 4509 },
-            { task: "digging game",     world: "dark",  x: 509,  y: 6965 },
-            { task: "stumpy",           world: "dark",  x: 3088, y: 6807 },
-            { task: "smith",            world: "dark",  x: 1456, y: 6561 },
-            { task: "purple chest",     world: "dark",  x: 3035, y: 5228 },
+            { task: "bumper ledge",     world: "dark",  x: 3158, y: 1500, checks: [[0x280 + 74, 6]] },
+            { task: "catfish",          world: "dark",  x: 9175, y: 1491, checks: [[0x410, 5]] },
+            { task: "pyramid",          world: "dark",  x: 5772, y: 4509, checks: [[0x280 + 91, 6]] },
+            { task: "digging game",     world: "dark",  x: 509,  y: 6965, checks: [[0x280 + 104, 6]] },
+            { task: "stumpy",           world: "dark",  x: 3088, y: 6807, checks: [[0x410, 3]] },
+            { task: "smith",            world: "dark",  x: 1456, y: 6561, checks: [[0x411, 2]] },
+            { task: "purple chest",     world: "dark",  x: 3035, y: 5228, checks: [[0x3c9, 4]] },
         ],
 
         connectors: [
             [
-                { roomset: "DM Ascent",    short: "DMa", parts: ["L", "R"] },
+                { roomset: "DM Ascent",    short: "DMa", parts: ["L", "R"], checks: [[0x410, 0]] },
                 { roomset: "DM Descent",   short: "DMd", parts: ["L", "R"] },
                 { roomset: "Bumper",       short: "Bmp", parts: ["U", "D"] },
             ],
@@ -259,45 +260,69 @@ function game_data(mode) {
             ],
 
             [
-                { roomset: "Hookshot",     short: "Hok", parts: ["L", "R"] },
-                { roomset: "Spiral",       short: "Spi", parts: ["U", "D"] },
-                { roomset: "Super Bunny",  short: "Bun", parts: ["U", "D"] },
+                { roomset: "Hookshot",     short: "Hok", parts: ["L", "R"], checks: [chest(60, 4), chest(60, 5), chest(60, 6), chest(60, 7)] },
+                { roomset: "Spiral",       short: "Spi", parts: ["U", "D"], checks: [chest(254, 4)] },
+                { roomset: "Super Bunny",  short: "Bun", parts: ["U", "D"], checks: [chest(248, 4), chest(248, 5)] },
             ],
 
             [
                 { roomset: "Old Man",      short: "Old", parts: ["L", "R"] },
-                { roomset: "Spectacle",    short: "Spc", parts: ["U", "Mid", "D"] },
-                { roomset: "Paradox",      short: "Par", parts: ["U", "Mid", "D"] },
+                { roomset: "Spectacle",    short: "Spc", parts: ["U", "Mid", "D"], checks: [chest(234, 10, "scoutable")] },
+                { roomset: "Paradox",      short: "Par", parts: ["U", "Mid", "D"], checks: [
+                    chest(239, 4), chest(239, 5), chest(239, 6), chest(239, 7), chest(239, 8), // Upstairs
+                    chest(255, 4), chest(255, 5), // Downstairs
+                    ] },
             ],
         ],
 
         holes: [
-            { roomset: "Bat",   short: "Bat" },
+            { roomset: "Bat",   short: "Bat", checks: [[0x411, 7]] },
             { roomset: "Fairy", short: "F", auto_clear: true },
             { roomset: "Ganon", short: "Gan" },
-            { roomset: "Jacks", short: "Jac" },
-            { roomset: "Thief", short: "Thf" },
-            { roomset: "Uncle", short: "Unc" },
-            { roomset: "Well",  short: "Wel" },
+            { roomset: "Jacks", short: "Jac", checks: [chest(226, 9, "scoutable")] },
+            { roomset: "Thief", short: "Thf", checks: [chest(225, 9, "scoutable")] },
+            { roomset: "Uncle", short: "Unc", checks: [chest(85, 4), [0x3c6, 0]] },
+            { roomset: "Well",  short: "Wel", checks: [chest(47, 4), chest(47, 5), chest(47, 6), chest(47, 7), chest(47, 8)] },
         ],
 
         special_rooms: [
             { roomset: "Bomb",    short: "Bom" },
-            { roomset: "House",   short: "Hus" },
-            { roomset: "Kid",     short: "Kid" },
-            { roomset: "Library", short: "Lib" },
-            { roomset: "Mimic",   short: "Mim" },
-            { roomset: "Potion",  short: "Pot" },
-            { roomset: "Saha",    short: "Sah" },
-            { roomset: "Spike",   short: "Spk" },
-            { roomset: "Smiths",  short: "Smi" },
+            { roomset: "House",   short: "Hus", checks: [chest(260, 4)] },
+            { roomset: "Kid",     short: "Kid", checks: [[0x410, 2]] },
+            { roomset: "Library", short: "Lib", checks: [[0x410, 7, "scoutable"]] },
+            { roomset: "Mimic",   short: "Mim", checks: [chest(268, 4)] },
+            { roomset: "Potion",  short: "Pot", checks: [[0x411, 5, "scoutable"]] },
+            { roomset: "Saha",    short: "Sah", checks: [chest(261, 4), chest(261, 5), chest(261, 6), [0x410, 4]] },
+            { roomset: "Spike",   short: "Spk", checks: [chest(279, 4)] },
+            { roomset: "Smiths",  short: "Smi", checks: [[0x411, 2]] },
         ],
 
         multi_rooms: [
-            { roomset: "5 Item", short: "5 i", count: 3,   auto_clear: true },
-            { roomset: "2 Item", short: "2 i", count: 3,   auto_clear: true },
-            { roomset: "1 Item", short: "1 i", count: 12,  auto_clear: true },
-            { roomset: "Dam",    short: "Dam", count: 1,   auto_clear: true },
+            { roomset: "5 Item", short: "5 i", count: 3,   auto_clear: true, checks: [
+                chest(285, 4), chest(285, 5), chest(285, 6), chest(285, 7), chest(285, 8), // Blind's House
+                chest(286, 4), chest(286, 5), chest(286, 6), chest(286, 7), chest(286, 10), // Hype Cave
+                chest(291, 4), chest(291, 5), chest(291, 6), chest(291, 7), chest(291, 10), // Mini Moldorm Cave
+                ] },
+            { roomset: "2 Item", short: "2 i", count: 3,   auto_clear: true, checks: [
+                chest(269, 4), chest(269, 5), // Mire Shack
+                chest(276, 4), chest(276, 5), // Waterfall Fairy
+                chest(278, 4), chest(278, 5), // Pyramid Fairy
+                ] },
+            { roomset: "1 Item", short: "1 i", count: 12,  auto_clear: true, checks: [
+                chest(262, 4), // Brewery
+                chest(262, 10), // Chest Game
+                chest(264, 4), // Chicken House
+                chest(266, 4), // Aginah
+                chest(275, 4), // King's Tomb
+                chest(283, 9, "scoutable"), // Graveyard Ledge
+                chest(283, 10, "scoutable"), // 45
+                chest(284, 4), // C-Shaped House
+                chest(288, 4), // Ice Rod Cave
+                chest(292, 4), // Bonk Rocks
+                chest(294, 9, "scoutable"), // Checkerboard
+                chest(295, 10, "scoutable"), // Hammer Pegs
+                ] },
+            { roomset: "Dam",    short: "Dam", count: 1,   auto_clear: true, checks: [chest(267, 4)] },
             { roomset: "Hint",   short: "Hin", count: 6,   auto_clear: true },
             { roomset: "Other",  short: "Oth", count: 35,  auto_clear: true },
         ],
@@ -343,4 +368,10 @@ function game_data(mode) {
 
         rewards: ["unknown", "crystal", "red_crystal", "pendant", "green_pendant"],
     };
+}
+
+function chest(room_id, bit_index, scoutable) {
+    return bit_index < 8 ?
+        [room_id * 2, bit_index, scoutable] :
+        [(room_id * 2) + 1, bit_index - 8, scoutable];
 }
