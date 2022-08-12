@@ -463,6 +463,14 @@ function game_data(mode) {
             ["boots", "glove", "flippers", "pearl", "sword", "shovel", "mushroom"],
         ],
 
+        icon_markers: [
+            ["bow", "blue_boom", "hookshot", "bombs", "powder", "mushroom"],
+            ["fire_rod", "ice_rod", "bombos", "ether", "quake", "shovel"],
+            ["lamp", "hammer", "flute", "bugnet", "book", "bigkey"],
+            ["bottle", "somaria", "byrna", "cape", "mirror", "smallkey_32"],
+            ["boots", "glove", "flippers", "pearl", "sword", "map"],
+        ],
+
         item_sets: {
             "bow": ["bow", "bow_silvers"],
             "boomerang": ["blue_boom", "red_boom"],

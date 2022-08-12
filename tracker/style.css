@@ -84,7 +84,7 @@ body {
 }
 
 .map-cover {
-    z-index: 5;
+    z-index: 6;
     width: 100%;
     text-align: center;
 }
@@ -96,7 +96,7 @@ body {
 }
 
 .full-cover {
-    z-index: 6;
+    z-index: 7;
     width: calc(100% - 272px);
     text-align: center;
 }
@@ -352,9 +352,20 @@ td {
     margin-left: 0;
 }
 
-.door-marker {
+.icon-marker {
     position: absolute;
     z-index: 3;
+    width: 32px;
+    height: 32px;
+    transform: translate(-16px, -16px);
+    pointer-events: none;
+    background-color: black;
+    border: 1px solid white;
+}
+
+.door-marker {
+    position: absolute;
+    z-index: 4;
     width: 21px;
     height: 21px;
     transform: translate(-10px, -10px);
@@ -371,7 +382,7 @@ td {
 }
 
 .door-marker-focused {
-    z-index: 4;
+    z-index: 5;
     outline: 2px solid black;
 }
 
@@ -401,6 +412,7 @@ td {
 
 .task-marker {
     position: absolute;
+    z-index: 4;
     transform: translate(-6px, -6px);
     pointer-events: none;
     background-color: #ff0000; /*#ff7000;*/
@@ -412,7 +424,7 @@ td {
 }
 
 .task-marker-focused {
-    z-index: 4;
+    z-index: 5;
     border: 3px solid black;
 }
 

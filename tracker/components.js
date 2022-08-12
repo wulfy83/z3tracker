@@ -26,6 +26,7 @@ Vue.component("tracker-main", {
                     <map-part v-for="world of game.worlds"
                         :world="world" :key="world" />
                     <assign-door-modal />
+                    <icon-marker-modal />
                 </div>
                 <div class="other-rooms-column tracker-column">
                     <room-group :roomsets="game.special_rooms" />
@@ -128,6 +129,40 @@ Vue.component("unassign-door-modal", {
     `,
 });
 
+Vue.component("icon-marker-modal", {
+    computed: {
+        is_open() {
+            return this.$root.modal.icon_marker;
+        },
+        icon_markers() {
+            return this.$root.game.icon_markers;
+        },
+    },
+    methods: {
+        close() {
+            this.$root.close_modal();
+        },
+        click_icon(icon) {
+            this.$root.add_icon_marker(icon);
+        },
+        style(icon) {
+            return {
+                "background-image": `url(images/icons/${icon}.png)`,
+            };
+        },
+    },
+    template: `
+        <div v-if="is_open" class="cover map-cover">
+            <div class="backdrop" @click="close"></div>
+            <div class="cover-box">
+                <div v-for="row in icon_markers">
+                    <div v-for="icon in row" class="item-icon" :style="style(icon)" @click="click_icon(icon)"></div>
+                </div>
+            </div>
+        </div>
+    `,
+});
+
 function event_coordinates(event) {
     const rect = event.target.getBoundingClientRect();
     return [
@@ -156,6 +191,9 @@ Vue.component("map-part", {
         task_markers() {
             return this.markers.filter(marker => marker.task && !this.$root.task_is_collected(marker));
         },
+        icon_markers() {
+            return this.$root.get_icon_markers(this.world);
+        },
     },
     methods: {
         mousemove(event) {
@@ -177,6 +215,10 @@ Vue.component("map-part", {
                 this.$root.door_marker_click(this.focused.door);
             }
         },
+        middle_click(event) {
+            const [x, y] = event_coordinates(event);
+            this.$root.map_middle_click(this.world, x, y);
+        },
         clear() {
             if (!this.focused) {
                 return;
@@ -195,7 +237,11 @@ Vue.component("map-part", {
                 @mouseenter="mousemove"
                 @mouseleave="mouseleave"
                 @click="click"
-                @click.right="clear">
+                @click.right="clear"
+                @click.middle="middle_click">
+            <icon-marker v-for="(marker, index) of icon_markers"
+                    :marker="marker"
+                    :key="index" />
             <door-marker v-for="marker of door_markers"
                     :marker="marker"
                     :focused="is_focused(marker)"
@@ -205,6 +251,23 @@ Vue.component("map-part", {
                     :focused="is_focused(marker)"
                     :key="marker.task" />
         </div>
+    `,
+});
+
+Vue.component("icon-marker", {
+    props: ["marker"],
+    computed: {
+        style() {
+            const [x, y] = this.$root.adjusted_marker_coordinates(this.marker);
+            return {
+                "background-image": `url(images/icons/${this.marker.icon}.png)`,
+                left: `${Math.round(x)}px`,
+                top:  `${Math.round(y)}px`,
+            };
+        },
+    },
+    template: `
+        <div class="icon-marker" :style="style"></div>
     `,
 });
 

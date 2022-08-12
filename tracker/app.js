@@ -15,6 +15,7 @@ function blank_tracker() {
         door_mapping: {},
         cleared_doors: {},
         cleared_tasks: {},
+        icon_markers: [],
         dungeon_cleared: {},
         dungeon_reward: {},
         dungeon_bigkey: {},
@@ -243,6 +244,45 @@ var app = new Vue({
             }
         },
 
+        map_middle_click(world, x, y) {
+            const marker = this.find_nearby_icon_marker(world, x, y);
+            if (marker) {
+                this.tracker.icon_markers = this.tracker.icon_markers.filter(m => m !== marker);
+            } else {
+                this.open_modal({ icon_marker: true, world, x, y });
+            }
+        },
+
+        find_nearby_icon_marker(world, x, y) {
+            const markers = this.tracker.icon_markers
+                .filter(marker => marker.world === world)
+                .reverse();
+            for (const marker of markers) {
+                const [marker_x, marker_y] = this.adjusted_marker_coordinates(marker);
+                const x_diff = Math.abs(marker_x - x);
+                const y_diff = Math.abs(marker_y - y);
+                if (x_diff <= 16 && y_diff <= 16) {
+                    return marker;
+                }
+            }
+            return null;
+        },
+
+        add_icon_marker(icon) {
+            const [x, y] = this.coordinates_map_relative([this.modal.x, this.modal.y]);
+            this.tracker.icon_markers.push({
+                world: this.modal.world,
+                x,
+                y,
+                icon,
+            });
+            this.close_modal();
+        },
+
+        get_icon_markers(world) {
+            return this.tracker.icon_markers.filter(marker => marker.world === world);
+        },
+
         item_icon(item) {
             if (item === "powder") {
                 if (!this.tracker.items.powder && this.tracker.items.mushroom) {
@@ -410,9 +450,17 @@ var app = new Vue({
             return nearest_marker;
         },
 
+        coordinates_map_relative(coordinates) {
+            const [x, y] = coordinates;
+            return [
+                (x / this.config.map_size) * 10000,
+                (y / this.config.map_size) * 10000,
+            ];
+        },
+
         log_coordinates(x, y) {
-            const adjust = z => Math.round((z / this.config.map_size) * 10000);
-            log(adjust(x) + ", " + adjust(y));
+            const [relative_x, relative_y] = this.coordinates_map_relative([x, y]);
+            log(relative_x + ", " + relative_y);
         },
 
         autotrack_is_enabled() {
