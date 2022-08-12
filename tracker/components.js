@@ -29,11 +29,11 @@ Vue.component("tracker-main", {
                     <assign-door-modal />
                 </div>
                 <div class="other-rooms-column tracker-column">
-                    <room-group :rooms="game.special_rooms" />
-                    <room-group :rooms="game.holes" />
+                    <room-group :roomsets="game.special_rooms" />
+                    <room-group :roomsets="game.holes" />
                 </div>
                 <div class="other-rooms-column tracker-column">
-                    <room-group :rooms="game.multi_rooms" />
+                    <room-group :roomsets="game.multi_rooms" />
                 </div>
                 <div class="filler-column tracker-column"></div>
                 <div class="items-column tracker-column">
@@ -104,7 +104,7 @@ Vue.component("unassign-door-modal", {
             return this.$root.modal.door_name;
         },
         room_name() {
-            const room = this.$root.door_destination(this.door_name);
+            const room = this.$root.door_assignment(this.door_name);
             return room.name;
         },
     },
@@ -138,7 +138,7 @@ Vue.component("unassign-room-modal", {
             return this.$root.modal.room;
         },
         door_name() {
-            return this.$root.room_destination(this.room);
+            return this.$root.room_assignment(this.room);
         },
     },
     methods: {
@@ -253,14 +253,12 @@ Vue.component("door-marker", {
             };
         },
         classes() {
-            const door = this.marker.door;
-            const room = this.$root.door_destination(door);
-            const source = this.$root.door_source(door);
-            const cleared = this.$root.door_is_cleared(door);
+            const door_name = this.marker.door;
+            const room = this.$root.door_assignment(door_name);
+            const cleared = this.$root.door_is_cleared(door_name);
             const status_class =
                 cleared ? "door-marker-cleared" :
-                (!room && !source) ? "door-marker-unassigned" :
-                !room ? "door-marker-partial" :
+                !room ? "door-marker-unassigned" :
                 room.type === "dungeon" ? "door-marker-dungeon" :
                 room.parts ? "door-marker-connector" :
                 "door-marker-generic";
@@ -271,13 +269,20 @@ Vue.component("door-marker", {
             ];
         },
         text() {
-            const room = this.$root.door_destination(this.marker.door);
+            const room = this.$root.door_assignment(this.marker.door);
             if (!room) {
                 return "";
             }
             let result = room.short;
-            if (room.parts) {
-                result += "\n" + room.part;
+            if (room.part && !room.count) {
+                const part_letters = {
+                    "🡨": "L",
+                    "🡪": "R",
+                    "🡩": "U",
+                    "🡫": "D",
+                };
+                const part = part_letters[room.part] || room.part;
+                result += "\n" + part;
             }
             return result;
         },
@@ -324,7 +329,7 @@ Vue.component("dungeon-table", {
     },
     methods: {
         instance(dungeon) {
-            return this.$root.room_instance(dungeon);
+            return this.$root.room_instance(dungeon.name);
         },
     },
     template: `
@@ -608,8 +613,8 @@ Vue.component("connector-set", {
         rows() {
             result = [];
             for (const connector of this.connectors) {
-                result.push({ header: true, room: connector });
-                for (const room of this.$root.room_instances(connector)) {
+                result.push({ header: true, roomset: connector });
+                for (const room of this.$root.roomset_part_instances(connector)) {
                     result.push({ part: true, room });
                 }
                 result.push({});
@@ -625,7 +630,7 @@ Vue.component("connector-set", {
                     <tr v-for="row of rows" class="room-row">
                         <td v-if="row.header"></td>
                         <td v-if="row.header">
-                            <room-label class="connector-label" :room="row.room" :text="row.room.roomset" />
+                            <room-label class="connector-label" :roomset="row.roomset" :text="row.roomset.roomset" />
                         </td>
                         <td v-if="row.part">
                             <room-part-label :room="row.room" />
@@ -641,16 +646,16 @@ Vue.component("connector-set", {
 });
 
 Vue.component("room-group", {
-    props: ["rooms"],
+    props: ["roomsets"],
     template: `
         <table class="room-table">
             <tbody>
-                <tr v-for="room of rooms" class="room-row" :key="room.roomset">
+                <tr v-for="roomset of roomsets" class="room-row" :key="roomset.roomset">
                     <td>
-                        <room-label :room="room" :text="room.roomset" />
+                        <room-label :roomset="roomset" :text="roomset.roomset" />
                     </td>
                     <td>
-                        <room-group-boxes :room="room" />
+                        <room-group-boxes :roomset="roomset" />
                     </td>
                 </tr>
             </tbody>
@@ -659,28 +664,28 @@ Vue.component("room-group", {
 });
 
 Vue.component("room-label", {
-    props: ["room", "text"],
+    props: ["roomset", "text"],
     computed: {
-        rooms() {
-            return this.$root.room_instances(this.room);
+        room_parts() {
+            return this.$root.roomset_part_instances(this.roomset);
         },
         classes() {
-            const cleared = this.rooms.every(room => this.$root.room_is_cleared(room));
+            const cleared = this.room_parts.every(room_part => this.$root.room_is_cleared(room_part));
             return cleared ? "text-strike" : null;
         },
     },
     template: `
         <div class="label room-label" :class="classes">
-            {{ text }} <unchecked-count :room="room" />
+            {{ text }} <unchecked-count :roomset="roomset" />
         </div>
     `,
 });
 
 Vue.component("unchecked-count", {
-    props: ["room"],
+    props: ["roomset"],
     computed: {
         counts() {
-            return this.$root.unchecked_counts(this.room);
+            return this.$root.unchecked_counts(this.roomset);
         },
         nonscoutable_exists() {
             return this.counts.nonscoutable_max > 0;
@@ -709,47 +714,35 @@ Vue.component("room-part-label", {
     computed: {
         classes() {
             const cleared = this.$root.room_is_cleared(this.room);
-            const assigned = this.$root.room_destination(this.room);
-            const source = this.$root.room_source(this.room);
-            const main =
-                (source && !assigned) ? "text-partial" :
-                cleared ? "text-muted" :
-                null;
-
             return [
-                main,
+                cleared ? "text-muted" : null,
                 this.first ? "room-part-label-first" : null,
             ];
-        },
-        part() {
-            return this.$root.part_symbol(this.room.part) || "";
         },
     },
     template: `
         <div v-if="room"
                 class="label room-part-label"
                 :class="classes">
-            {{ part }}
+            {{ this.room.part }}
         </div>
     `,
 });
 
 Vue.component("room-group-boxes", {
-    props: ["room"],
+    props: ["roomset"],
     computed: {
+        rooms() {
+            return this.$root.roomset_part_instances(this.roomset);
+        },
         single_instance() {
-            if (this.room.count) {
-                return null;
-            } else {
-                return this.$root.room_instance(this.room);
-            }
+            return !this.roomset.count;
         },
         box_rows() {
-            const instances = this.$root.room_instances(this.room);
             const result = [];
             const per_row = 4;
-            for (let i = 0; i < instances.length; i += per_row) {
-                result.push(instances.slice(i, i + per_row));
+            for (let i = 0; i < this.rooms.length; i += per_row) {
+                result.push(subarray(this.rooms, i, per_row));
             }
             return result;
         },
@@ -757,7 +750,7 @@ Vue.component("room-group-boxes", {
     template: `
         <div>
             <template v-if="single_instance">
-                <room-box :room="single_instance" />
+                <room-box :room="rooms[0]" />
             </template>
             <template v-else>
                 <div v-for="(row, i) of box_rows" class="room-row" :key="i">
@@ -772,7 +765,7 @@ Vue.component("room-box", {
     props: ["room", "small"],
     computed: {
         door_name() {
-            return this.$root.room_destination(this.room);
+            return this.$root.room_assignment(this.room);
         },
         text() {
             return !this.door_name ? "" :
@@ -780,11 +773,8 @@ Vue.component("room-box", {
                 this.door_name;
         },
         classes() {
-            const assigned = this.$root.room_destination(this.room);
-            const source = this.$root.room_source(this.room);
             const cleared = this.$root.room_is_cleared(this.room);
             const main =
-                (source && !assigned) ? "text-partial" :
                 (cleared && this.small) ? "text-muted" :
                 cleared ? "text-strike" :
                 null;

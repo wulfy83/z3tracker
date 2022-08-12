@@ -60,7 +60,7 @@ function game_data(mode) {
 
     const dungeons_base = [
         { name: "Eastern", reward: true,  short: "Eas" },
-        { name: "Desert",  reward: true,  short: "Des", parts: ["L", "Mid", "R", "Fin"] },
+        { name: "Desert",  reward: true,  short: "Des", parts: ["🡨", "Mid", "🡪", "Fin"] },
         { name: "Hera",    reward: true,  short: "Her" },
         { name: "PoD",     reward: true,  short: "PoD" },
         { name: "Swamp",   reward: true,  short: "Swm" },
@@ -69,7 +69,7 @@ function game_data(mode) {
         { name: "Ice",     reward: true,  short: "Ice" },
         { name: "Mire",    reward: true,  short: "Mir" },
         { name: "TRock",   reward: true,  short: "TR",  parts: ["Fro", "Eye", "Big", "Las"] },
-        { name: "Castle",  reward: false, short: "Cas", parts: ["L", "Mid", "R", "Sew"] },
+        { name: "Castle",  reward: false, short: "Cas", parts: ["🡨", "Mid", "🡪", "Sew"] },
         { name: "Aga",     reward: false, short: "Aga" },
         { name: "GT",      reward: false, short: "GT"  },
     ];
@@ -248,27 +248,27 @@ function game_data(mode) {
 
         connectors: [
             [
-                { roomset: "DM Ascent",    short: "DMa", parts: ["L", "R"], checks: [[0x410, 0]] },
-                { roomset: "DM Descent",   short: "DMd", parts: ["L", "R"] },
-                { roomset: "Bumper",       short: "Bmp", parts: ["U", "D"] },
+                { roomset: "DM Ascent",    short: "DMa", parts: ["🡨", "🡪"], checks: [[0x410, 0]] },
+                { roomset: "DM Descent",   short: "DMd", parts: ["🡨", "🡪"] },
+                { roomset: "Bumper",       short: "Bmp", parts: ["🡩", "🡫"] },
             ],
 
             [
-                { roomset: "Brothers",     short: "Bro", parts: ["L", "R"] },
-                { roomset: "Elder",        short: "Eld", parts: ["L", "R"] },
-                { roomset: "Fairy Ascent", short: "Fai", parts: ["U", "D"] },
+                { roomset: "Brothers",     short: "Bro", parts: ["🡨", "🡪"] },
+                { roomset: "Elder",        short: "Eld", parts: ["🡨", "🡪"] },
+                { roomset: "Fairy Ascent", short: "Fai", parts: ["🡩", "🡫"] },
             ],
 
             [
-                { roomset: "Hookshot",     short: "Hok", parts: ["L", "R"], checks: [chest(60, 4), chest(60, 5), chest(60, 6), chest(60, 7)] },
-                { roomset: "Spiral",       short: "Spi", parts: ["U", "D"], checks: [chest(254, 4)] },
-                { roomset: "Super Bunny",  short: "Bun", parts: ["U", "D"], checks: [chest(248, 4), chest(248, 5)] },
+                { roomset: "Hookshot",     short: "Hok", parts: ["🡨", "🡪"], checks: [chest(60, 4), chest(60, 5), chest(60, 6), chest(60, 7)] },
+                { roomset: "Spiral",       short: "Spi", parts: ["🡩", "🡫"], checks: [chest(254, 4)] },
+                { roomset: "Super Bunny",  short: "Bun", parts: ["🡩", "🡫"], checks: [chest(248, 4), chest(248, 5)] },
             ],
 
             [
-                { roomset: "Old Man",      short: "Old", parts: ["L", "R"] },
-                { roomset: "Spectacle",    short: "Spc", parts: ["U", "Mid", "D"], checks: [chest(234, 10, "scoutable")] },
-                { roomset: "Paradox",      short: "Par", parts: ["U", "Mid", "D"], checks: [
+                { roomset: "Old Man",      short: "Old", parts: ["🡨", "🡪"] },
+                { roomset: "Spectacle",    short: "Spc", parts: ["🡩", "Mid", "🡫"], checks: [chest(234, 10, "scoutable")] },
+                { roomset: "Paradox",      short: "Par", parts: ["🡩", "Mid", "🡫"], checks: [
                     chest(239, 4), chest(239, 5), chest(239, 6), chest(239, 7), chest(239, 8), // Upstairs
                     chest(255, 4), chest(255, 5), // Downstairs
                     ] },
@@ -277,7 +277,7 @@ function game_data(mode) {
 
         holes: [
             { roomset: "Bat",   short: "Bat", checks: [[0x411, 7]] },
-            { roomset: "Fairy", short: "F", auto_clear: true },
+            { roomset: "Fairy", short: "F", auto_clear: "always" },
             { roomset: "Ganon", short: "Gan" },
             { roomset: "Jacks", short: "Jac", checks: [chest(226, 9, "scoutable")] },
             { roomset: "Thief", short: "Thf", checks: [chest(225, 9, "scoutable")] },
@@ -298,17 +298,17 @@ function game_data(mode) {
         ],
 
         multi_rooms: [
-            { roomset: "5 Item", short: "5 i", count: 3,   auto_clear: true, checks: [
+            { roomset: "5 Item", short: "5 i", count: 3,   auto_clear: "manual", checks: [
                 chest(285, 4), chest(285, 5), chest(285, 6), chest(285, 7), chest(285, 8), // Blind's House
                 chest(286, 4), chest(286, 5), chest(286, 6), chest(286, 7), chest(286, 10), // Hype Cave
                 chest(291, 4), chest(291, 5), chest(291, 6), chest(291, 7), chest(291, 10), // Mini Moldorm Cave
                 ] },
-            { roomset: "2 Item", short: "2 i", count: 3,   auto_clear: true, checks: [
+            { roomset: "2 Item", short: "2 i", count: 3,   auto_clear: "manual", checks: [
                 chest(269, 4), chest(269, 5), // Mire Shack
                 chest(276, 4), chest(276, 5), // Waterfall Fairy
                 chest(278, 4), chest(278, 5), // Pyramid Fairy
                 ] },
-            { roomset: "1 Item", short: "1 i", count: 12,  auto_clear: true, checks: [
+            { roomset: "1 Item", short: "1 i", count: 12,  auto_clear: "manual", checks: [
                 chest(262, 4), // Brewery
                 chest(262, 10), // Chest Game
                 chest(264, 4), // Chicken House
@@ -322,9 +322,136 @@ function game_data(mode) {
                 chest(294, 9, "scoutable"), // Checkerboard
                 chest(295, 10, "scoutable"), // Hammer Pegs
                 ] },
-            { roomset: "Dam",    short: "Dam", count: 1,   auto_clear: true, checks: [chest(267, 4)] },
-            { roomset: "Hint",   short: "Hin", count: 6,   auto_clear: true },
-            { roomset: "Other",  short: "Oth", count: 35,  auto_clear: true },
+            { roomset: "Dam",    short: "Dam", count: 1,   auto_clear: "manual", checks: [chest(267, 4)] },
+            { roomset: "Hint",   short: "Hin", count: 6,   auto_clear: "always" },
+            { roomset: "Other",  short: "Oth", count: 35,  auto_clear: "always" },
+        ],
+
+        vanilla_entrances: [
+            ["45", "1 Item 1"],
+            ["ARCHERY", "Other 1"],
+            ["BEE SHOP", "Other 2"],
+            ["BLIND HOUSE", "5 Item 1"],
+            ["BOMB SHOP ROCKS", "Other 3"],
+            ["BOMB SHOP", "Bomb"],
+            ["BROS RIGHT", "Brothers 🡪"],
+            ["C SHAPED", "1 Item 2"],
+            ["CANYON OPEN", "Other 4"],
+            ["CANYON ROCK", "Other 5"],
+            ["CASTLE BACK", "Aga"],
+            ["CASTLE FRONT", "Castle Mid"],
+            ["CASTLE HOLE", "Uncle"],
+            ["CASTLE LEFT", "Castle 🡨"],
+            ["CASTLE RIGHT", "Castle 🡪"],
+            ["CHEST GAME", "1 Item 3"],
+            ["DAM", "Dam 1"],
+            ["DARK CHURCH", "Hint 1"],
+            ["DARK EDM DOUB L", "Super Bunny 🡫"],
+            ["DARK EDM DOUB R", "Other 6"],
+            ["DARK EDM FLOAT", "Hookshot 🡨"],
+            ["DARK EDM ROCK", "Hookshot 🡪"],
+            ["DARK EDM SUMMIT", "Super Bunny 🡩"],
+            ["DARK FLUTE 5", "Hint 2"],
+            ["DARK HILLS LOWER", "Bumper 🡫"],
+            ["DARK HILLS UPPER", "Bumper 🡩"],
+            ["DARK JACKS", "Other 7"],
+            ["DARK LAKE SHOP", "Other 8"],
+            ["DARK LEDGE LEFT", "TRock Eye"],
+            ["DARK LEDGE RIGHT", "TRock Big"],
+            ["DARK MALL LEFT", "Hint 3"],
+            ["DARK MALL LOWER", "Other 9"],
+            ["DARK MALL RIGHT", "Hint 4"],
+            ["DARK WDM BOTTOM", "Other 10"],
+            ["DARK WDM LEDGE", "Spike"],
+            ["DARK WITCH", "Other 11"],
+            ["DESERT BACK", "Desert Fin"],
+            ["DESERT CAVE", "1 Item 4"],
+            ["DESERT CHECKER", "1 Item 5"],
+            ["DESERT FRONT", "Desert Mid"],
+            ["DESERT LEFT", "Desert 🡨"],
+            ["DESERT RIGHT", "Desert 🡪"],
+            ["EAST HIDEOUT", "Saha"],
+            ["EASTERN", "Eastern"],
+            ["EDM DOUBLE LEFT", "Other 12"],
+            ["EDM DOUBLE RIGHT", "Paradox 🡫"],
+            ["EDM LEDGE LEFT", "Spiral 🡩"],
+            ["EDM LEDGE MID", "Fairy Ascent 🡩"],
+            ["EDM LEDGE RIGHT", "Mimic"],
+            ["EDM LOWER LEFT", "Spiral 🡫"],
+            ["EDM LOWER RIGHT", "Paradox Mid"],
+            ["EDM ROCKBLOCKED", "Fairy Ascent 🡫"],
+            ["EDM SUMMIT", "Paradox 🡩"],
+            ["ELDER LEFT", "Elder 🡨"],
+            ["ELDER RIGHT", "Elder 🡪"],
+            ["FLUTE 5", "Other 13"],
+            ["GRASSMAN", "Other 14"],
+            ["GRAVE HOLE", "Castle Sew"],
+            ["GRAVE LEDGE", "1 Item 6"],
+            ["GT", "GT"],
+            ["HERA", "Hera"],
+            ["HILLS LOWER", "DM Ascent 🡨"],
+            ["HILLS UPPER", "DM Descent 🡨"],
+            ["HOME ROCKS", "Other 15"],
+            ["HOME SOUTH", "Other 16"],
+            ["HOME", "House"],
+            ["HYPE", "5 Item 2"],
+            ["ICE", "Ice"],
+            ["JACKS HOUSE", "Other 17"],
+            ["KAK FORTUNE", "Other 18"],
+            ["KAK GAMBLE", "Other 19"],
+            ["KAK HOLE", "Well"],
+            ["KAK SEALED", "Other 20"],
+            ["KAK SHOP", "Other 21"],
+            ["KINGS TOMB", "1 Item 7"],
+            ["LAKE FORTUNE", "Other 22"],
+            ["LAKE ISLAND", "Other 23"],
+            ["LAKE SHOP", "Other 24"],
+            ["LIBRARY", "Library"],
+            ["MALL LEFT", "1 Item 8"],
+            ["MALL LOWER", "Other 25"],
+            ["MALL RIGHT", "Other 26"],
+            ["MAZE", "Brothers 🡨"],
+            ["MIRE CAVE", "Hint 5"],
+            ["MIRE LEFT", "2 Item 1"],
+            ["MIRE RIGHT", "Other 27"],
+            ["MIRE", "Mire"],
+            ["MOLDORM", "5 Item 3"],
+            ["OUTCAST FORTUNE", "Other 28"],
+            ["OUTCAST PEGHOUSE", "Other 29"],
+            ["OUTCAST SEALED", "1 Item 9"],
+            ["PEG CAVE", "1 Item 10"],
+            ["POD HINT", "Hint 6"],
+            ["POD", "PoD"],
+            ["PRE EASTERN", "Other 30"],
+            ["PRE POD", "Other 31"],
+            ["PYRAMID HOLE", "Ganon"],
+            ["PYRAMID SEALED", "2 Item 2"],
+            ["RIVER HOLE", "Fairy"],
+            ["SAFETY LEDGE", "TRock Las"],
+            ["SANC ROCKS", "1 Item 11"],
+            ["SICK HOUSE", "Kid"],
+            ["SKULL", "Skull"],
+            ["SMITH HOLE", "Bat"],
+            ["SMITH", "Smiths"],
+            ["SNITCH LEFT", "Other 32"],
+            ["SNITCH RIGHT", "Other 33"],
+            ["SPEC ROCK", "Spectacle 🡩"],
+            ["SWAMP", "Swamp"],
+            ["SWEEP LADY", "1 Item 12"],
+            ["TAVERN", "Other 34"],
+            ["THIEVES", "Thieves"],
+            ["TREE HOLE", "Jacks"],
+            ["TURTLE ROCK", "TRock Fro"],
+            ["WATERFALL", "2 Item 3"],
+            ["WDM ENTER", "DM Ascent 🡪"],
+            ["WDM EXIT", "DM Descent 🡪"],
+            ["WDM LEDGE L", "Spectacle Mid"],
+            ["WDM LEDGE R", "Spectacle 🡫"],
+            ["WDM OLDMAN BACK", "Old Man 🡪"],
+            ["WDM OLDMAN FRONT", "Old Man 🡨"],
+            ["WITCH", "Potion"],
+            ["WOODS HOLE", "Thief"],
+            ["WOODS LOG", "Other 35"],
         ],
 
         items: [

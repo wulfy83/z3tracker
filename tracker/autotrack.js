@@ -5,10 +5,6 @@ class AutoTrackException extends Error {
     }
 }
 
-function hex(n) {
-    return n.toString(16).toUpperCase();
-}
-
 class SnesSocket {
     constructor() {
         this.socket = null;

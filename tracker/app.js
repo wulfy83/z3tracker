@@ -12,11 +12,8 @@ function get_config() {
 function blank_tracker() {
     return {
         mode: "normal",
-        insanity: false,
         door_mapping: {},
-        room_mapping: {},
         cleared_doors: {},
-        cleared_rooms: {},
         cleared_tasks: {},
         dungeon_cleared: {},
         dungeon_reward: {},
@@ -60,24 +57,35 @@ var app = new Vue({
     },
 
     computed: {
-        door_mapping_inverse() {
+        room_mapping() {
             const result = {};
-            for (const [door_name, room] of Object.entries(this.tracker.door_mapping)) {
-                result[room.name] = door_name;
-            }
-            return result;
-        },
-
-        room_mapping_inverse() {
-            const result = {};
-            for (const [room_name, door_name] of Object.entries(this.tracker.room_mapping)) {
-                result[door_name] = room_name;
+            for (const [door_name, room_name] of Object.entries(this.tracker.door_mapping)) {
+                result[room_name] = door_name;
             }
             return result;
         },
 
         game() {
             return game_data(this.tracker.mode);
+        },
+
+        room_instances() {
+            const roomsets = [
+                ...this.game.dungeons,
+                ...this.game.connectors.flat(),
+                ...this.game.holes,
+                ...this.game.special_rooms,
+                ...this.game.multi_rooms,
+            ];
+
+            const result = {};
+            for (const roomset of roomsets) {
+                for (const part of this.roomset_parts(roomset)) {
+                    const name = this.roomset_part_name(roomset, part);
+                    result[name] = { ...roomset, part, name };
+                }
+            }
+            return result;
         },
     },
 
@@ -89,105 +97,70 @@ var app = new Vue({
             };
         },
 
+        set_vanilla_entrances() {
+            if (Object.keys(this.tracker.door_mapping).length > 0) {
+                throw Error("There are already entrance assignments");
+            }
+            for (const [door_name, room_name] of this.game.vanilla_entrances) {
+                const room = this.room_instance(room_name);
+                this.assign_door(door_name, room, "automated");
+            }
+        },
+
         set_mode(mode) {
             throw_if_invalid_mode(mode);
             this.tracker.mode = mode;
         },
 
-        set_insanity(enabled) {
-            this.tracker.insanity = enabled;
+        roomset_part_name(roomset, part) {
+            return part ?
+                roomset.roomset + " " + part :
+                roomset.roomset;
         },
 
-        part_symbol(part) {
-            const part_symbols = {
-                L: "🡨",
-                R: "🡪",
-                U: "🡩",
-                D: "🡫",
-            };
-            return part_symbols[part] || part;
+        roomset_parts(roomset) {
+            return (
+                roomset.parts ? roomset.parts :
+                roomset.count ? [...Array(roomset.count).keys()].map(n => String(n + 1)) :
+                [null]
+            );
         },
 
-        room_name(room, part) {
-            if (part) {
-                return room.roomset + " " + this.part_symbol(part);
-            } else {
-                return room.roomset;
+        roomset_part_instances(roomset) {
+            return this.roomset_parts(roomset).map(part => this.room_instance(this.roomset_part_name(roomset, part)));
+        },
+
+        room_instance(room_name) {
+            return this.room_instances[room_name];
+        },
+
+        door_assignment(door_name) {
+            const room_name = this.tracker.door_mapping[door_name];
+            if (!room_name) {
+                return null;
             }
+            return this.room_instance(room_name);
         },
 
-        room_instance(room, part) {
-            return {
-                ...room,
-                part,
-                name: this.room_name(room, part),
-            };
+        room_assignment(room) {
+            return this.room_mapping[room.name];
         },
 
-        room_instances(room) {
-            const parts =
-                room.parts ? room.parts :
-                room.count ? [...Array(room.count).keys()] :
-                [null];
-            return parts.map(part => this.room_instance(room, part));
-        },
-
-        door_destination(door_name) {
-            return this.tracker.door_mapping[door_name];
-        },
-
-        room_destination(room) {
-            return this.tracker.room_mapping[room.name];
-        },
-
-        door_source(door_name) {
-            return this.room_mapping_inverse[door_name];
-        },
-
-        room_source(room) {
-            return this.door_mapping_inverse[room.name];
-        },
-
-        assign_door(door_name, room) {
-            this.$set(this.tracker.door_mapping, door_name, { ...room });
-            if (!this.tracker.insanity) {
-                this.$set(this.tracker.room_mapping, room.name, door_name);
-                if (room.auto_clear) {
-                    this.$set(this.tracker.cleared_doors, door_name, true);
-                    this.$set(this.tracker.cleared_rooms, room.name, true);
-                }
-            }
-        },
-
-        assign_room(room, door_name) {
-            this.$set(this.tracker.room_mapping, room.name, door_name);
-            if (!this.tracker.insanity) {
-                this.$set(this.tracker.door_mapping, door_name, { ...room });
-                if (room.auto_clear) {
-                    this.$set(this.tracker.cleared_doors, door_name, true);
-                    this.$set(this.tracker.cleared_rooms, room.name, true);
-                }
+        assign_door(door_name, room, automated) {
+            this.$set(this.tracker.door_mapping, door_name, room.name);
+            if (room.auto_clear === "always" || (room.auto_clear === "manual" && !automated)) {
+                this.$set(this.tracker.cleared_doors, door_name, true);
             }
         },
 
         unassign_door(door_name) {
-            const room = this.door_destination(door_name);
             this.$delete(this.tracker.door_mapping, door_name);
             this.$delete(this.tracker.cleared_doors, door_name);
-            if (!this.tracker.insanity) {
-                this.$delete(this.tracker.room_mapping, room.name);
-                this.$delete(this.tracker.cleared_rooms, room.name);
-            }
         },
 
         unassign_room(room) {
-            const door_name = this.room_destination(room);
-            this.$delete(this.tracker.room_mapping, room.name);
-            this.$delete(this.tracker.cleared_rooms, room.name);
-            if (!this.tracker.insanity) {
-                this.$delete(this.tracker.door_mapping, door_name);
-                this.$delete(this.tracker.cleared_doors, door_name);
-            }
+            const door_name = this.room_assignment(room);
+            this.unassign_door(door_name);
         },
 
         unassign_door_click(door_name) {
@@ -201,24 +174,17 @@ var app = new Vue({
         },
 
         toggle_door_cleared(door_name) {
-            const room = this.door_destination(door_name);
+            const room = this.door_assignment(door_name);
             if (room) {
                 const cleared = !this.tracker.cleared_doors[door_name];
                 this.$set(this.tracker.cleared_doors, door_name, cleared);
-                if (!this.tracker.insanity) {
-                    this.$set(this.tracker.cleared_rooms, room.name, cleared);
-                }
             }
         },
 
         toggle_room_cleared(room) {
-            const door_name = this.room_destination(room);
+            const door_name = this.room_assignment(room);
             if (door_name) {
-                const cleared = !this.tracker.cleared_rooms[room.name];
-                this.$set(this.tracker.cleared_rooms, room.name, cleared);
-                if (!this.tracker.insanity) {
-                    this.$set(this.tracker.cleared_doors, door_name, cleared);
-                }
+                this.toggle_door_cleared(door_name);
             }
         },
 
@@ -232,7 +198,8 @@ var app = new Vue({
         },
 
         room_is_cleared(room) {
-            return this.tracker.cleared_rooms[room.name];
+            const door_name = this.room_assignment(room);
+            return this.door_is_cleared(door_name);
         },
 
         task_is_cleared(task) {
@@ -254,30 +221,30 @@ var app = new Vue({
         },
 
         door_marker_click(door_name) {
-            const room = this.door_destination(door_name);
+            const assigned_room = this.door_assignment(door_name);
             if (this.modal.assign_room) {
-                if (!room || this.tracker.insanity) {
-                    this.assign_room(this.modal.room, door_name);
+                if (!assigned_room) {
+                    this.assign_door(door_name, this.modal.room);
                     this.close_modal();
                 }
-            } else if (room) {
+            } else if (assigned_room) {
                 this.open_modal({ unassign_door: true, door_name });
             } else {
-                this.open_modal({assign_door: true, door_name });
+                this.open_modal({ assign_door: true, door_name });
             }
         },
 
         room_click(room) {
-            const door_name = this.room_destination(room);
+            const assigned_door_name = this.room_assignment(room);
             if (this.modal.assign_door) {
-                if (!door_name || this.tracker.insanity) {
+                if (!assigned_door_name) {
                     this.assign_door(this.modal.door_name, room);
                     this.close_modal();
                 }
-            } else if (door_name) {
-                this.open_modal({ unassign_room: true, room: { ... room } });
+            } else if (assigned_door_name) {
+                this.open_modal({ unassign_room: true, room});
             } else {
-                this.open_modal({ assign_room: true, room: { ...room } });
+                this.open_modal({ assign_room: true, room });
             }
         },
 
@@ -623,16 +590,12 @@ var app = new Vue({
     },
 });
 
-function bit(flags, bit) {
-    return (flags & (1 << bit)) !== 0;
-}
-
-function subarray(array, start, length) {
-    return array.slice(start, start + length);
-}
-
 function reset() {
     app.reset();
+}
+
+function vanilla_entrances() {
+    app.set_vanilla_entrances();
 }
 
 function mode_normal() {
@@ -645,22 +608,6 @@ function mode_pots() {
 
 function mode_doors() {
     app.set_mode("doors");
-}
-
-function insanity_on() {
-    app.set_insanity(true);
-}
-
-function insanity_off() {
-    app.set_insanity(false);
-}
-
-function autotrack_enable() {
-    app.set_autotrack_enabled(true);
-}
-
-function autotrack_disable() {
-    app.set_autotrack_enabled(false);
 }
 
 function log(message) {
