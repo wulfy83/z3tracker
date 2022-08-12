@@ -32,13 +32,13 @@ function blank_tracker() {
 }
 
 function load_tracker() {
-    const json = localStorage.getItem("dev_tracker_data");
+    const json = localStorage.getItem("tracker_data");
     return json ? JSON.parse(json) : null;
 }
 
 function save_tracker(tracker) {
     const json = JSON.stringify(tracker);
-    localStorage.setItem("dev_tracker_data", json);
+    localStorage.setItem("tracker_data", json);
 }
 
 var app = new Vue({
