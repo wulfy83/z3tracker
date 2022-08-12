@@ -11,7 +11,6 @@ Vue.component("tracker-main", {
         <div class="tracker layer noselect">
             <assign-room-modal />
             <unassign-door-modal class="cover full-cover" />
-            <unassign-room-modal class="cover full-cover" />
             <div class="tracker-column-set">
                 <connector-set v-for="(set, i) of game.connectors"
                         :connectors="set" :key="i" />
@@ -121,39 +120,6 @@ Vue.component("unassign-door-modal", {
             <div class="backdrop" @click="close"></div>
             <div class="cover-box">
                 <p><b>{{ room_name }}</b></p>
-                <p>at</p>
-                <p><b>{{ door_name }}</b></p>
-                <p class="unassign-button" @dblclick="unassign">Unassign</p>
-            </div>
-        </div>
-    `,
-});
-
-Vue.component("unassign-room-modal", {
-    computed: {
-        is_open() {
-            return this.$root.modal.unassign_room;
-        },
-        room() {
-            return this.$root.modal.room;
-        },
-        door_name() {
-            return this.$root.room_assignment(this.room);
-        },
-    },
-    methods: {
-        close() {
-            this.$root.close_modal();
-        },
-        unassign() {
-            this.$root.unassign_room_click(this.room);
-        },
-    },
-    template: `
-        <div v-if="is_open" class="cover full-cover">
-            <div class="backdrop" @click="close"></div>
-            <div class="cover-box">
-                <p><b>{{ room.name }}</b></p>
                 <p>at</p>
                 <p><b>{{ door_name }}</b></p>
                 <p class="unassign-button" @dblclick="unassign">Unassign</p>

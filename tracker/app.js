@@ -168,11 +168,6 @@ var app = new Vue({
             this.close_modal();
         },
 
-        unassign_room_click(room) {
-            this.unassign_room(room);
-            this.close_modal();
-        },
-
         toggle_door_cleared(door_name) {
             const room = this.door_assignment(door_name);
             if (room) {
@@ -242,7 +237,7 @@ var app = new Vue({
                     this.close_modal();
                 }
             } else if (assigned_door_name) {
-                this.open_modal({ unassign_room: true, room});
+                this.open_modal({ unassign_door: true, door_name: assigned_door_name });
             } else {
                 this.open_modal({ assign_room: true, room });
             }
