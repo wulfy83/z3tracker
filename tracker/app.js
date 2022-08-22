@@ -29,6 +29,7 @@ function blank_tracker() {
             enabled: false,
             status: "",
         },
+        done: false,
     };
 }
 
@@ -469,11 +470,20 @@ var app = new Vue({
 
         set_autotrack_enabled(enabled) {
             this.tracker.autotrack.enabled = enabled;
+            if (enabled) {
+                this.tracker.done = false;
+            }
         },
 
         set_autotrack_status(status) {
             log("Status: " + status);
             this.tracker.autotrack.status = status;
+        },
+
+        done() {
+            this.set_autotrack_enabled(false);
+            this.set_autotrack_status("Done");
+            this.tracker.done = true;
         },
 
         get_autotrack_status() {
