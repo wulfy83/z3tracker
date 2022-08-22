@@ -126,32 +126,33 @@ async function autotrack_main() {
     while (true) {
         await sleep(100);
 
-        if (app.autotrack_is_enabled()) {
-            try {
-                await snes.ensure_ready();
-
-                const module = await snes.get_work_ram(0x10, 1);
-                if (module[0] === 0x1A) {
-                    app.done();
-                    continue;
-                }
-                if (module[0] <= 0x05 || module[0] === 0x14 || module[0] >= 0x1C) {
-                    app.set_autotrack_status("Not In Game");
-                    continue;
-                }
-
-
-                const buffer = await snes.get_save_ram(offset, 0x100);
-                app.autotrack_update(buffer, offset);
-                offset = (offset + 0x100) % 0x500;
-            } catch (error) {
-                app.set_autotrack_status(error.message);
-                if (error.should_disable) {
-                    app.set_autotrack_enabled(false);
-                }
-            }
-        } else {
+        if (!app.autotrack_is_enabled()) {
             snes.disconnect();
+            continue;
+        }
+
+        try {
+            await snes.ensure_ready();
+
+            const module = await snes.get_work_ram(0x10, 1);
+            if (module[0] === 0x1A) {
+                app.done();
+                continue;
+            }
+            if (module[0] <= 0x05 || module[0] === 0x14 || module[0] >= 0x1C) {
+                app.set_autotrack_status("Not In Game");
+                continue;
+            }
+
+
+            const buffer = await snes.get_save_ram(offset, 0x100);
+            app.autotrack_update(buffer, offset);
+            offset = (offset + 0x100) % 0x500;
+        } catch (error) {
+            app.set_autotrack_status(error.message);
+            if (error.should_disable) {
+                app.set_autotrack_enabled(false);
+            }
         }
     }
 }
