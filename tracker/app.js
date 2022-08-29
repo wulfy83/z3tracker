@@ -103,9 +103,13 @@ var app = new Vue({
             if (Object.keys(this.tracker.door_mapping).length > 0) {
                 throw Error("There are already entrance assignments");
             }
-            for (const [door_name, room_name] of this.game.vanilla_entrances) {
+            for (const row of this.game.vanilla_entrances) {
+                const [door_name, room_name] = row;
                 const room = this.room_instance(room_name);
                 this.assign_door(door_name, room, "automated");
+                if (row[2] === "cleared") {
+                    this.toggle_door_cleared(door_name);
+                }
             }
         },
 
