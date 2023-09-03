@@ -500,13 +500,8 @@ var app = new Vue({
             }
         },
 
-        autotrack_update(save_buffer_part, offset) {
+        autotrack_update(save_buffer) {
             this.set_autotrack_status("Working");
-
-            const save_buffer = [...this.tracker.save_buffer];
-            for (let i = 0; i < save_buffer_part.length; i++) {
-                save_buffer[offset + i] = save_buffer_part[i];
-            }
             this.tracker.save_buffer = save_buffer;
 
             const item_buffer = subarray(save_buffer, 0x340, 0x50);
