@@ -639,6 +639,19 @@ var app = new Vue({
             }
             return result;
         },
+
+        warnings() {
+            const rewards = Object.values(this.tracker.dungeon_reward).map(i => this.game.rewards[i]);
+            const counts = frequencies(rewards);
+            const warnings = [];
+            if (counts["pendant"] + counts["green_pendant"] > 3) {
+                warnings.push("Too many pendants")
+            }
+            if (counts["crystal"] + counts["red_crystal"] > 7) {
+                warnings.push("Too many crystals");
+            }
+            return warnings;
+        },
     },
 });
 

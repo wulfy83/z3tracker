@@ -39,6 +39,7 @@ Vue.component("tracker-main", {
                 <div class="items-column tracker-column">
                     <item-tracker />
                     <settings />
+                    <warnings />
                 </div>
             </div>
         </div>
@@ -635,6 +636,21 @@ Vue.component("settings", {
     `,
 });
 
+Vue.component("warnings", {
+    computed: {
+        warnings() {
+            return this.$root.warnings();
+        },
+    },
+    template: `
+        <div class="warnings">
+            <p v-if="warnings.length > 0">WARNING:</p>
+            <p v-for="warning in warnings">
+                {{ warning }}
+            </p>
+        </div>
+    `,
+});
 
 Vue.component("connector-set", {
     props: ["connectors"],

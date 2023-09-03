@@ -9,3 +9,14 @@ function bit(flags, bit) {
 function subarray(array, start, length) {
     return array.slice(start, start + length);
 }
+
+function frequencies(array) {
+    const result = {};
+    for (const element of array) {
+        if (!result[element]) {
+            result[element] = 0;
+        }
+        result[element]++;
+    }
+    return result;
+}
