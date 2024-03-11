@@ -9,7 +9,7 @@ function get_config() {
     };
 }
 
-function blank_tracker() {
+function tracker_defaults() {
     return {
         mode: "normal",
         door_mapping: {},
@@ -33,28 +33,20 @@ function blank_tracker() {
     };
 }
 
-function load_tracker() {
-    const json = localStorage.getItem("tracker_data");
-    return json ? JSON.parse(json) : null;
-}
-
-function save_tracker(tracker) {
-    const json = JSON.stringify(tracker);
-    localStorage.setItem("tracker_data", json);
-}
+Storage.init(tracker_defaults());
 
 var app = new Vue({
     el: "#tracker",
     template: `<tracker-main />`,
     data: {
         config: get_config(),
-        tracker: load_tracker() || blank_tracker(),
+        tracker: Storage.load_latest(),
         modal: {},
     },
     watch: {
         tracker: {
             deep: true,
-            handler: save_tracker,
+            handler: Storage.save,
         },
     },
 
@@ -92,11 +84,27 @@ var app = new Vue({
     },
 
     methods: {
-        reset() {
+        create_tracker() {
             this.tracker = {
-                ...blank_tracker(),
+                ...Storage.create(tracker_defaults()),
                 mode: this.tracker.mode,
             };
+        },
+
+        clear_tracker() {
+            this.tracker = {
+                ...tracker_defaults(),
+                id: this.tracker.id,
+                mode: this.tracker.mode,
+            };
+        },
+
+        load_latest_tracker() {
+            this.tracker = Storage.load_latest();
+        },
+
+        load_tracker(id) {
+            this.tracker = Storage.load(id);
         },
 
         set_vanilla_entrances() {
@@ -655,8 +663,28 @@ var app = new Vue({
     },
 });
 
-function reset() {
-    app.reset();
+function create() {
+    app.create_tracker();
+}
+
+function clear() {
+    app.clear_tracker();
+}
+
+function latest() {
+    app.load_latest_tracker();
+}
+
+function load(id) {
+    app.load_tracker(id);
+}
+
+function current() {
+    return app.tracker.id;
+}
+
+function ids() {
+    return Storage.ids();
 }
 
 function vanilla_entrances() {
