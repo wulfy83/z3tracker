@@ -143,7 +143,6 @@ async function autotrack_main() {
                 continue;
             }
 
-
             const buffer = await snes.get_save_ram(0, 0x500);
             app.autotrack_update(buffer);
         } catch (error) {
