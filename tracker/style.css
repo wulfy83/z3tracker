@@ -189,6 +189,10 @@ td {
     position: relative;
 }
 
+.dungeon-unchecked {
+    width: 32px;
+}
+
 .dungeon-compass {
     margin-right: 4px;
 }
@@ -236,8 +240,11 @@ td {
 
 .unchecked-counts {
     font-weight: bold;
-    vertical-align: super;
     font-size: 12px;
+}
+
+.room-label .unchecked-counts {
+    vertical-align: super;
 }
 
 .unchecked-nonscoutable {

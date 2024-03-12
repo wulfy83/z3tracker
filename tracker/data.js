@@ -74,12 +74,183 @@ function game_data(mode) {
         { name: "GT",      reward: false, short: "GT"  },
     ];
 
+    const boss_checks = {
+        Eastern: chest(200, 11),
+        Desert:  chest(51, 11),
+        Hera:    chest(7, 11),
+        PoD:     chest(90, 11),
+        Swamp:   chest(6, 11),
+        Skull:   chest(41, 11),
+        Thieves: chest(172, 11),
+        Ice:     chest(222, 11),
+        Mire:    chest(144, 11),
+        TRock:   chest(164, 11),
+    }
+
+    const dungeon_checks = {
+        Eastern: [
+            chest(185, 4), // cannonball
+            chest(170, 4), // map
+            chest(168, 4), // compass
+            chest(184, 4), // bk
+            chest(169, 4), // big chest
+            boss_checks.Eastern,
+        ],
+        Desert: [
+            chest(116, 4), // map
+            chest(115, 10, "scoutable"), // torch
+            chest(133, 4), // compass
+            chest(117, 4), // bk
+            chest(115, 4), // big chest
+            boss_checks.Desert,
+        ],
+        Hera: [
+            chest(135, 10, "scoutable"), // basement cage
+            chest(119, 4), // map
+            chest(135, 4), // bk
+            chest(39, 4), // big chest
+            chest(39, 5), // compass
+            boss_checks.Hera,
+        ],
+        PoD: [
+            chest(9, 4), // shooter
+            chest(43, 4), // map
+            chest(42, 4), // arena ledge
+            chest(42, 5), // arena bridge
+            chest(58, 4), // bk
+            chest(10, 4), // turtle basement
+            chest(26, 4), // big chest
+            chest(26, 5), // compass
+            chest(26, 6), // harmless hellway
+            chest(106, 4), // dark basement left
+            chest(106, 5), // dark basement right
+            chest(25, 4), // dark maze top
+            chest(25, 5), // dark maze bottom
+            boss_checks.PoD,
+        ],
+        Swamp: [
+            chest(40, 4), // entrance
+            chest(55, 4), // map
+            chest(70, 4), // compass
+            chest(52, 4), // left side
+            chest(53, 4), // bk
+            chest(54, 4), // big chest
+            chest(118, 4), // flooded left
+            chest(118, 5), // flooded right
+            chest(102, 4), // waterfall
+            boss_checks.Swamp,
+        ],
+        Skull: [
+            chest(87, 4), // bk
+            chest(88, 4), // big chest
+            chest(88, 5), // map
+            chest(87, 5), // gibdo jail
+            chest(103, 4), // compass
+            chest(104, 4), // pinball
+            chest(89, 4), // bridge
+            boss_checks.Skull,
+        ],
+        Thieves: [
+            chest(219, 4), // map
+            chest(203, 4), // ambush
+            chest(220, 4), // compass
+            chest(219, 5), // bk
+            chest(101, 4), // cracked floor
+            chest(69, 4), // blind's cell
+            chest(68, 4), // big chest
+            boss_checks.Thieves,
+        ],
+        Ice: [
+            chest(46, 4), // pengator
+            chest(126, 4), // freezor
+            chest(95, 4), // spike
+            chest(63, 4), // map
+            chest(31, 4), // bk
+            chest(158, 4), // big chest
+            chest(174, 4), // ice t
+            boss_checks.Ice,
+        ],
+        Mire: [
+            chest(162, 4), // bridge
+            chest(193, 4), // compass
+            chest(209, 4), // bk
+            chest(194, 4), // lobby
+            chest(195, 4), // big chest
+            chest(195, 5), // map
+            chest(179, 4), // spike
+            boss_checks.Mire,
+        ],
+        TRock: [
+            chest(214, 4), // compass
+            chest(183, 4), // roller left
+            chest(183, 5), // roller right
+            chest(182, 4), // chomps
+            chest(20, 4), // bk
+            chest(36, 4), // big chest
+            chest(4, 4), // crystal roller
+            chest(213, 4), // laser bridge 1
+            chest(213, 5), // laser bridge 2
+            chest(213, 6), // laser bridge 3
+            chest(213, 7), // laser bridge 4
+            boss_checks.TRock,
+        ],
+        Castle: [
+            chest(114, 4), // map
+            chest(113, 4), // boomerang
+            chest(128, 4), // zelda's cell
+            chest(50, 4), // dark cross
+            chest(17, 4), // secret room left
+            chest(17, 5), // secret room mid
+            chest(17, 6), // secret room right
+            chest(18, 4), // sanctuary
+        ],
+        Aga: [
+            chest(224, 4), // first
+            chest(208, 4), // second
+        ],
+        GT: [
+            chest(140, 10, "scoutable"), // torch
+            chest(140, 5), // hope left
+            chest(140, 6), // hope right
+            chest(141, 4), // tile room
+            chest(157, 4), // compass upper left
+            chest(157, 5), // compass upper right
+            chest(157, 6), // compass lower left
+            chest(157, 7), // compass lower right
+            chest(123, 4), // stalfos upper left
+            chest(123, 5), // stalfos upper right
+            chest(123, 6), // stalfos lower left
+            chest(123, 7), // stalfos lower right
+            chest(139, 4), // map
+            chest(125, 4), // firesnakes
+            chest(124, 4), // rando upper left
+            chest(124, 5), // rando upper right
+            chest(124, 6), // rando lower left
+            chest(124, 7), // rando lower right
+            chest(140, 7), // bomb floor
+            chest(28, 4), // ice armos mid
+            chest(28, 5), // ice armos left
+            chest(28, 6), // ice armos right
+            chest(140, 4), // big chest
+            chest(61, 4), // helma left
+            chest(61, 5), // helma right
+            chest(61, 6), // pre moldorm
+            chest(77, 4), // post moldorm
+        ],
+    };
+
     const dungeons = dungeons_base.map(dungeon => ({
         ...dungeon,
         ...dungeon_keys[mode][dungeon.name],
         roomset: dungeon.name,
         type: "dungeon",
     }));
+
+    if (mode === "normal") {
+        for (const dungeon of dungeons) {
+            dungeon.checks = dungeon_checks[dungeon.name];
+        }
+    }
 
     return {
         worlds: ["light", "dark"],

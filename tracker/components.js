@@ -367,6 +367,9 @@ Vue.component("dungeon-table", {
             <tbody>
                 <tr v-for="dungeon of dungeons" class="dungeon-row" :key="dungeon.name">
                     <td>
+                        <dungeon-unchecked :dungeon="dungeon" />
+                    </td>
+                    <td>
                         <dungeon-map :dungeon="dungeon" />
                     </td>
                     <td>
@@ -548,6 +551,15 @@ Vue.component("dungeon-compass", {
                 :style="style"
                 @click="add"
                 @click.right="remove">
+        </div>
+    `,
+});
+
+Vue.component("dungeon-unchecked", {
+    props: ["dungeon"],
+    template: `
+        <div class="dungeon-unchecked label">
+            <unchecked-count :roomset="dungeon" />
         </div>
     `,
 });
