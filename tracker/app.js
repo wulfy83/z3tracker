@@ -307,6 +307,11 @@ var app = new Vue({
                     return "shovel";
                 }
             }
+            if (item === "heart_pieces") {
+                if (!this.tracker.items.heart_pieces) {
+                    return "heart_pieces0";
+                }
+            }
 
             const item_level = this.tracker.items[item] || 0;
             const index = Math.max(item_level - 1, 0);
@@ -540,10 +545,15 @@ var app = new Vue({
                 (bow_flags & 0x80) ? 1 :
                 0;
 
+            const bottles = []
             let bottle_count = 0;
             for (let i = 0; i < 4; i++) {
-                if (buffer[0x1C + i] !== 0) {
+                const bottle_content = buffer[0x1C + i];
+                if (bottle_content === 0) {
+                    bottles.push(0);
+                } else {
                     bottle_count++;
+                    bottles.push(bottle_content - 1);
                 }
             }
 
@@ -558,7 +568,7 @@ var app = new Vue({
                 "shovel": shovel,
                 "flute": flute,
                 "bow": bow,
-                "bottle": bottle_count,
+                "bottle_count": bottle_count,
                 "hookshot": nonzero(0x02),
                 "bombs": nonzero(0x03),
                 "fire_rod": nonzero(0x05),
@@ -579,6 +589,11 @@ var app = new Vue({
                 "flippers": nonzero(0x16),
                 "pearl": nonzero(0x17),
                 "sword": (buffer[0x19] === 0xFF) ? 0 : buffer[0x19],
+                "bottle_0": bottles[0],
+                "bottle_1": bottles[1],
+                "bottle_2": bottles[2],
+                "bottle_3": bottles[3],
+                "heart_pieces": buffer[0x2B],
             };
         },
 

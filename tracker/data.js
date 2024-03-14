@@ -626,9 +626,20 @@ function game_data(mode) {
         ["bow", "boomerang", "hookshot", "bombs", "powder"],
         ["fire_rod", "ice_rod", "bombos", "ether", "quake"],
         ["lamp", "hammer", "flute", "bugnet", "book"],
-        ["bottle", "somaria", "byrna", "cape", "mirror"],
+        ["bottle_count", "somaria", "byrna", "cape", "mirror"],
         [],
         ["boots", "glove", "flippers", "pearl", "sword", "shovel", "mushroom"],
+        ["bottle_0", "bottle_1", "bottle_2", "bottle_3", "heart_pieces"],
+    ];
+
+    const bottle_types = [
+        "bottle_empty",
+        "bottle_redpotion",
+        "bottle_greenpotion",
+        "bottle_bluepotion",
+        "bottle_fairy",
+        "bottle_bee",
+        "bottle_goodbee",
     ];
 
     const item_sets = {
@@ -649,7 +660,7 @@ function game_data(mode) {
         "shovel": ["shovel"],
         "bugnet": ["bugnet"],
         "book": ["book"],
-        "bottle": ["bottle1", "bottle2", "bottle3", "bottle4"],
+        "bottle_count": ["bottle_count1", "bottle_count2", "bottle_count3", "bottle_count4"],
         "somaria": ["somaria"],
         "byrna": ["byrna"],
         "cape": ["cape"],
@@ -659,6 +670,11 @@ function game_data(mode) {
         "flippers": ["flippers"],
         "pearl": ["pearl"],
         "sword": ["sword1", "sword2", "sword3", "sword4"],
+        "bottle_0": bottle_types,
+        "bottle_1": bottle_types,
+        "bottle_2": bottle_types,
+        "bottle_3": bottle_types,
+        "heart_pieces": ["heart_pieces1", "heart_pieces2", "heart_pieces3"],
     };
 
     const icon_markers = [
