@@ -631,14 +631,6 @@ function game_data(mode) {
         ["boots", "glove", "flippers", "pearl", "sword", "shovel", "mushroom"],
     ];
 
-    const icon_markers = [
-        ["bow", "blue_boom", "hookshot", "bombs", "powder", "mushroom"],
-        ["fire_rod", "ice_rod", "bombos", "ether", "quake", "shovel"],
-        ["lamp", "hammer", "flute", "bugnet", "book", "bigkey"],
-        ["bottle", "somaria", "byrna", "cape", "mirror", "smallkey_32"],
-        ["boots", "glove", "flippers", "pearl", "sword", "map"],
-    ];
-
     const item_sets = {
         "bow": ["bow", "bow_silvers"],
         "boomerang": ["blue_boom", "red_boom"],
@@ -669,6 +661,14 @@ function game_data(mode) {
         "sword": ["sword1", "sword2", "sword3", "sword4"],
     };
 
+    const icon_markers = [
+        ["bow", "blue_boom", "hookshot", "bombs", "powder", "mushroom"],
+        ["fire_rod", "ice_rod", "bombos", "ether", "quake", "shovel"],
+        ["lamp", "hammer", "flute", "bugnet", "book", "bigkey"],
+        ["bottle", "somaria", "byrna", "cape", "mirror", "smallkey_32"],
+        ["boots", "glove", "flippers", "pearl", "sword", "map"],
+    ];
+
     const rewards = ["unknown", "crystal", "red_crystal", "pendant", "green_pendant"];
 
     return {
@@ -681,8 +681,8 @@ function game_data(mode) {
         multi_rooms,
         vanilla_entrances,
         items,
-        icon_markers,
         item_sets,
+        icon_markers,
         rewards,
     };
 }
