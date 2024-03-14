@@ -629,6 +629,7 @@ function game_data(mode) {
         ["bottle_count", "somaria", "byrna", "cape", "mirror"],
         [],
         ["boots", "glove", "flippers", "pearl", "sword", "shovel", "mushroom"],
+        [],
         ["bottle_0", "bottle_1", "bottle_2", "bottle_3", "heart_pieces"],
     ];
 
