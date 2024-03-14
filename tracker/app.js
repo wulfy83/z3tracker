@@ -24,6 +24,7 @@ function tracker_defaults() {
         dungeon_compass: {},
         items: {
         },
+        collection_rate: 0,
         save_buffer: new Array(0x500).fill(0),
         autotrack: {
             enabled: false,
@@ -517,6 +518,8 @@ var app = new Vue({
             this.set_autotrack_status("Working");
             this.tracker.save_buffer = save_buffer;
 
+            this.tracker.collection_rate = save_buffer[0x423] + (save_buffer[0x424] << 8);
+
             const item_buffer = subarray(save_buffer, 0x340, 0x50);
             this.tracker.items = this.parse_items(item_buffer);
             this.tracker.dungeon_compass = this.parse_dungeon_items(item_buffer[0x24], item_buffer[0x25]);
@@ -700,6 +703,10 @@ function current() {
 
 function ids() {
     return Storage.ids();
+}
+
+function collection() {
+    return app.tracker.collection_rate;
 }
 
 function vanilla_entrances() {
