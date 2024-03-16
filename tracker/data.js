@@ -682,7 +682,7 @@ function game_data(mode) {
         ["bow", "blue_boom", "hookshot", "bombs", "powder", "mushroom"],
         ["fire_rod", "ice_rod", "bombos", "ether", "quake", "shovel"],
         ["lamp", "hammer", "flute", "bugnet", "book", "bigkey"],
-        ["bottle", "somaria", "byrna", "cape", "mirror", "smallkey_32"],
+        ["bottle_empty", "somaria", "byrna", "cape", "mirror", "smallkey_32"],
         ["boots", "glove", "flippers", "pearl", "sword", "map"],
     ];
 
