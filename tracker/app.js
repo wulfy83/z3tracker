@@ -212,14 +212,24 @@ var app = new Vue({
             return this.door_is_cleared(door_name);
         },
 
+        room_is_priority(room) {
+            if (!room) {
+                return false;
+            }
+            if (room.priority) {
+                return true;
+            }
+            const counts = this.unchecked_counts(room);
+            return counts.priority.unchecked > 0;
+        },
+
         task_is_cleared(task) {
             return this.tracker.cleared_tasks[task];
         },
 
         task_is_collected(marker) {
-            const unchecked_counts = this.unchecked_counts(marker);
-            const count = unchecked_counts.nonscoutable + unchecked_counts.scoutable;
-            return count === 0;
+            const counts = this.unchecked_counts(marker);
+            return counts.total.unchecked === 0;
         },
 
         close_modal() {
@@ -645,23 +655,26 @@ var app = new Vue({
 
         unchecked_counts(object) {
             const checks = object.checks || [];
-            const result = { nonscoutable: 0, nonscoutable_max: 0, scoutable: 0, scoutable_max: 0 };
+            const result = {
+                total: { unchecked: 0, max: 0 },
+                scoutable: { unchecked: 0, max: 0 },
+                priority: { unchecked: 0, max: 0 },
+            };
             for (const check of checks) {
                 const address = check[0];
                 const bit_index = check[1];
-                const scoutable = check[2] === "scoutable";
-                if (scoutable) {
-                    result.scoutable_max++;
-                } else {
-                    result.nonscoutable_max++;
-                }
-                if (!bit(this.tracker.save_buffer[address], bit_index)) {
-                    if (scoutable) {
-                        result.scoutable++;
-                    } else {
-                        result.nonscoutable++;
+                const is_checked = bit(this.tracker.save_buffer[address], bit_index);
+                const types = check[2] || [];
+                for (const type of ["total", ...types]) {
+                    result[type].max++;
+                    if (!is_checked) {
+                        result[type].unchecked++;
                     }
                 }
+            }
+            result.nonscoutable = {
+                unchecked: result.total.unchecked - result.scoutable.unchecked,
+                max: result.total.max - result.scoutable.max,
             }
             return result;
         },

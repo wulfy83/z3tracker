@@ -286,9 +286,11 @@ Vue.component("door-marker", {
             const door_name = this.marker.door;
             const room = this.$root.door_assignment(door_name);
             const cleared = this.$root.door_is_cleared(door_name);
+            const priority = this.$root.room_is_priority(room);
             const status_class =
                 cleared ? "door-marker-cleared" :
                 !room ? "door-marker-unassigned" :
+                priority ? "door-marker-priority" :
                 room.type === "dungeon" ? "door-marker-dungeon" :
                 room.parts ? "door-marker-connector" :
                 "door-marker-generic";
@@ -745,22 +747,22 @@ Vue.component("unchecked-count", {
             return this.$root.unchecked_counts(this.roomset);
         },
         nonscoutable_exists() {
-            return this.counts.nonscoutable_max > 0;
+            return this.counts.nonscoutable.max > 0;
         },
         scoutable_exists() {
-            return this.counts.scoutable_max > 0;
+            return this.counts.scoutable.max > 0;
         },
         nonscoutable_class() {
-            return this.counts.nonscoutable > 0 ? "unchecked-nonscoutable" : "unchecked-zero";
+            return this.counts.nonscoutable.unchecked > 0 ? "unchecked-nonscoutable" : "unchecked-zero";
         },
         scoutable_class() {
-            return this.counts.scoutable > 0 ? "unchecked-scoutable" : "unchecked-zero";
+            return this.counts.scoutable.unchecked > 0 ? "unchecked-scoutable" : "unchecked-zero";
         },
     },
     template: `
         <span class="unchecked-counts">
-            <span :class="nonscoutable_class" v-if="nonscoutable_exists">{{ counts.nonscoutable }}</span>
-            <span :class="scoutable_class" v-if="scoutable_exists">{{ counts.scoutable }}</span>
+            <span :class="nonscoutable_class" v-if="nonscoutable_exists">{{ counts.nonscoutable.unchecked }}</span>
+            <span :class="scoutable_class" v-if="scoutable_exists">{{ counts.scoutable.unchecked }}</span>
         </span>
     `,
 });

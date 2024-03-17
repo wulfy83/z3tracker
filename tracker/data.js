@@ -98,14 +98,14 @@ function game_data(mode) {
         ],
         Desert: [
             chest(116, 4), // map
-            chest(115, 10, "scoutable"), // torch
+            chest(115, 10, ["scoutable"]), // torch
             chest(133, 4), // compass
             chest(117, 4), // bk
             chest(115, 4), // big chest
             boss_checks.Desert,
         ],
         Hera: [
-            chest(135, 10, "scoutable"), // basement cage
+            chest(135, 10, ["scoutable"]), // basement cage
             chest(119, 4), // map
             chest(135, 4), // bk
             chest(39, 4), // big chest
@@ -209,7 +209,7 @@ function game_data(mode) {
             chest(208, 4), // second
         ],
         GT: [
-            chest(140, 10, "scoutable"), // torch
+            chest(140, 10, ["scoutable"]), // torch
             chest(140, 5), // hope left
             chest(140, 6), // hope right
             chest(141, 4), // tile room
@@ -435,10 +435,17 @@ function game_data(mode) {
 
         [
             { roomset: "Old Man",      short: "Old", parts: ["🡨", "🡪"] },
-            { roomset: "Spectacle",    short: "Spc", parts: ["🡩", "Mid", "🡫"], checks: [chest(234, 10, "scoutable")] },
+            { roomset: "Spectacle",    short: "Spc", parts: ["🡩", "Mid", "🡫"], checks: [chest(234, 10, ["scoutable"])] },
             { roomset: "Paradox",      short: "Par", parts: ["🡩", "Mid", "🡫"], checks: [
-                chest(239, 4), chest(239, 5), chest(239, 6), chest(239, 7), chest(239, 8), // Upstairs
-                chest(255, 4), chest(255, 5), // Downstairs
+                // Upstairs
+                chest(239, 4, ["priority"]),
+                chest(239, 5, ["priority"]),
+                chest(239, 6, ["priority"]),
+                chest(239, 7, ["priority"]),
+                chest(239, 8, ["priority"]),
+                // Downstairs
+                chest(255, 4, ["priority"]),
+                chest(255, 5, ["priority"]),
                 ] },
         ],
     ];
@@ -447,8 +454,8 @@ function game_data(mode) {
         { roomset: "Bat",   short: "Bat", checks: [[0x411, 7]] },
         { roomset: "Fairy", short: "F", auto_clear: "always" },
         { roomset: "Ganon", short: "Gan" },
-        { roomset: "Jacks", short: "Jac", checks: [chest(226, 9, "scoutable")] },
-        { roomset: "Thief", short: "Thf", checks: [chest(225, 9, "scoutable")] },
+        { roomset: "Jacks", short: "Jac", checks: [chest(226, 9, ["scoutable"])] },
+        { roomset: "Thief", short: "Thf", checks: [chest(225, 9, ["scoutable"])] },
         { roomset: "Uncle", short: "Unc", checks: [chest(85, 4), [0x3c6, 0]] },
         { roomset: "Well",  short: "Wel", checks: [chest(47, 4), chest(47, 5), chest(47, 6), chest(47, 7), chest(47, 8)] },
     ];
@@ -457,40 +464,44 @@ function game_data(mode) {
         { roomset: "Bomb",    short: "Bom" },
         { roomset: "House",   short: "Hus", checks: [chest(260, 4)] },
         { roomset: "Kid",     short: "Kid", checks: [[0x410, 2]] },
-        { roomset: "Library", short: "Lib", checks: [[0x410, 7, "scoutable"]] },
+        { roomset: "Library", short: "Lib", checks: [[0x410, 7, ["scoutable"]]] },
         { roomset: "Mimic",   short: "Mim", checks: [chest(268, 4)] },
-        { roomset: "Potion",  short: "Pot", checks: [[0x411, 5, "scoutable"]] },
-        { roomset: "Saha",    short: "Sah", checks: [chest(261, 4), chest(261, 5), chest(261, 6), [0x410, 4]] },
+        { roomset: "Potion",  short: "Pot", checks: [[0x411, 5, ["scoutable"]]] },
+        { roomset: "Saha",    short: "Sah", checks: [
+            chest(261, 4, ["priority"]),
+            chest(261, 5, ["priority"]),
+            chest(261, 6, ["priority"]),
+            [0x410, 4]] },
         { roomset: "Spike",   short: "Spk", checks: [chest(279, 4)] },
         { roomset: "Smiths",  short: "Smi", checks: [[0x411, 2]] },
     ];
 
     const multi_rooms = [
-        { roomset: "5 Item", short: "5 i", count: 3,   auto_clear: "manual", checks: [
+        { roomset: "5 Item", short: "5 i", count: 3,   auto_clear: "manual", priority: true, checks: [
             chest(285, 4), chest(285, 5), chest(285, 6), chest(285, 7), chest(285, 8), // Blind's House
             chest(286, 4), chest(286, 5), chest(286, 6), chest(286, 7), chest(286, 10), // Hype Cave
             chest(291, 4), chest(291, 5), chest(291, 6), chest(291, 7), chest(291, 10), // Mini Moldorm Cave
             ] },
-        { roomset: "2 Item", short: "2 i", count: 3,   auto_clear: "manual", checks: [
+        { roomset: "2 Item", short: "2 i", count: 3,   auto_clear: "manual", priority: true, checks: [
             chest(269, 4), chest(269, 5), // Mire Shack
             chest(276, 4), chest(276, 5), // Waterfall Fairy
             chest(278, 4), chest(278, 5), // Pyramid Fairy
             ] },
-        { roomset: "1 Item", short: "1 i", count: 12,  auto_clear: "manual", checks: [
+        { roomset: "1 Item", short: "1 i", count: 12,  auto_clear: "manual", priority: true, checks: [
             chest(262, 4), // Brewery
             chest(262, 10), // Chest Game
             chest(264, 4), // Chicken House
             chest(266, 4), // Aginah
             chest(275, 4), // King's Tomb
-            chest(283, 9, "scoutable"), // Graveyard Ledge
-            chest(283, 10, "scoutable"), // 45
+            chest(283, 9, ["scoutable"]), // Graveyard Ledge
+            chest(283, 10, ["scoutable"]), // 45
             chest(284, 4), // C-Shaped House
             chest(288, 4), // Ice Rod Cave
             chest(292, 4), // Bonk Rocks
-            chest(294, 9, "scoutable"), // Checkerboard
-            chest(295, 10, "scoutable"), // Hammer Pegs
+            chest(294, 9, ["scoutable"]), // Checkerboard
+            chest(295, 10, ["scoutable"]), // Hammer Pegs
             ] },
-        { roomset: "Dam",    short: "Dam", count: 1,   auto_clear: "manual", checks: [chest(267, 4)] },
+        { roomset: "Dam",    short: "Dam", count: 1,   auto_clear: "manual", priority: true, checks: [chest(267, 4)] },
         { roomset: "Hint",   short: "Hin", count: 6,   auto_clear: "always" },
         { roomset: "Other",  short: "Oth", count: 35,  auto_clear: "always" },
     ];
@@ -704,8 +715,8 @@ function game_data(mode) {
     };
 }
 
-function chest(room_id, bit_index, scoutable) {
+function chest(room_id, bit_index, types) {
     return bit_index < 8 ?
-        [room_id * 2, bit_index, scoutable] :
-        [(room_id * 2) + 1, bit_index - 8, scoutable];
+        [room_id * 2, bit_index, types] :
+        [(room_id * 2) + 1, bit_index - 8, types];
 }

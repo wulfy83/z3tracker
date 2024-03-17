@@ -417,6 +417,10 @@ td {
     background-color: #c080ff;
 }
 
+.door-marker-priority {
+    background-color: #ffffff;
+}
+
 .door-marker-cleared {
     background-color: rgba(128,128,128,0.5)
 }
