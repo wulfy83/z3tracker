@@ -11,7 +11,7 @@ class SnesSocket {
     }
 
     create_websocket() {
-        const socket = new WebSocket("ws://localhost:8080");
+        const socket = new WebSocket("ws://localhost:23074");
 
         socket.binaryType = "arraybuffer";
         return new Promise((resolve, reject) => {
